@@ -1,11 +1,10 @@
 import subprocess
 
 import os
-
-print( os.environ["PATH"] )
-
 import sys
-print( sys.path )
+
+#print( os.environ["PATH"] )
+
 
 
 if __name__=="__main__":
@@ -16,6 +15,7 @@ if __name__=="__main__":
     #proc.communicate()
 
 
+    print( sys.version )
 
     # command using specific python environment
     command = [ "D:/ProgramData/Anaconda3/envs/testpyqt/python.exe", "call.py", "argument from main process" ]
