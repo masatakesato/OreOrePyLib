@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "testNonDominatedSorting", "testNonDominatedSorting\testNonDominatedSorting.pyproj", "{4893209A-3F0B-4BDC-A687-AEE8FAE1B422}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4893209A-3F0B-4BDC-A687-AEE8FAE1B422}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4893209A-3F0B-4BDC-A687-AEE8FAE1B422}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B29084F2-1241-4E70-9563-273A2A01D39D}
+	EndGlobalSection
+EndGlobal

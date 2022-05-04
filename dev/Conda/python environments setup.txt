@@ -1,0 +1,119 @@
+//============= Development environments =================//
+
+[tensorflow_dev]
+conda create -n tensorflow_dev python=3.6
+conda activate tensorflow_dev
+conda install pillow -y
+conda install pyqt -y
+conda install -c conda-forge ffmpeg -y
+conda install -c conda-forge sk-video -y
+conda install -c conda-forge scikit-learn -y
+conda install -c conda-forge matplotlib -y
+conda install -c conda-forge pydot -y
+# conda install -c conda-forge graphviz -y # installed by pydot. 2022.03.01
+conda install tensorflow-gpu -y
+conda install -c conda-forge tensorflow-hub
+
+
+[pytorch_dev]
+conda create -n pytorch_dev python=3.7
+conda activate pytorch_dev
+conda install pillow
+conda install pyqt
+conda install scikit-learn
+conda install matplotlib
+conda install -c pytorch pytorch
+conda install -c pytorch torchvision
+
+
+[opengl_dev]
+conda create -n opengl_dev python=3.6
+conda activate opengl_dev
+conda install -c conda-forge pillow
+conda install -c conda-forge numpy
+conda install -c anaconda pyopengl
+conda install -c anaconda freeglut
+
+
+[env_node_editor_37]
+conda create -n env_node_editor_37 python=3.7
+conda activate env_node_editor_37
+conda install pillow
+conda install pyqt
+conda install -c conda-forge pyside2
+conda install -c conda-forge pyinstaller
+
+
+[testpyqt]
+conda create -n testpyqt python=3.7
+conda activate testpyqt
+conda install -c conda-forge pyqt
+conda install -c conda-forge pywin32
+conda install -c conda-forge pywinhook
+conda install -c conda-forge pyopengl
+conda install -c conda-forge numpy
+
+
+//============= Search engine environments ===============//
+
+[env_searchclient]
+conda create -n env_searchclient python=3.6
+conda activate env_searchclient
+conda install msgpack-python=0.5.6
+conda install pillow
+conda install pyqt
+
+
+[env_searcherserver]
+conda create -n env_searcherserver python=3.6
+conda activate env_searcherserver
+conda install msgpack-python=0.5.6
+conda install tensorflow-gpu
+conda install -c conda-forge tensorflow-hub
+
+
+[env_indexer(Wrangling + Feature Extraction)]
+conda create -n env_indexer python=3.6
+conda activate env_indexer
+conda install -c conda-forge ffmpeg
+conda install -c conda-forge sk-video 
+conda install -c conda-forge matplotlib
+conda install tensorflow-gpu
+conda install -c conda-forge tensorflow-hub
+
+
+
+//============= Web scraping environments ===============//
+
+[scraping37]
+conda create -n scraping37 python=3.7
+conda activate scraping37
+conda install -c conda-forge selenium
+conda install -c conda-forge geckodriver
+conda install pyqt
+// 別途Firefoxブラウザのインストールも忘れずに!
+
+
+
+
+//============= OpenCV environments ====================//
+
+[opencv_dev]
+conda create -n opencv_dev python=3.7
+conda activate opencv_dev
+conda install -c conda-forge opencv
+conda install -c conda-forge matplotlib
+
+
+
+
+//================ Additional Options ===================//
+
+[ pyinstaller ]
+conda install -c conda-forge pyinstaller
+
+
+
+
+//=============== REMOVE ENVIRONMENT ===================//
+conda remove -n <my_env> --all

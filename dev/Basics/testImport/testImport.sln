@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.757
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "testImport", "testImport\testImport.pyproj", "{22977D47-7F19-4654-8E0B-0C64F79DCBA9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{22977D47-7F19-4654-8E0B-0C64F79DCBA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22977D47-7F19-4654-8E0B-0C64F79DCBA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A52BC3A7-80B2-469D-8935-3E465609D45C}
+	EndGlobalSection
+EndGlobal

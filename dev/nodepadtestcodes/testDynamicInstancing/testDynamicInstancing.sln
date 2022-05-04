@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.757
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "testDynamicInstancing", "testDynamicInstancing\testDynamicInstancing.pyproj", "{45426022-8454-452C-AD13-7C6178BD9B0A}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "testNodeBuilder", "testNodeBuilder\testNodeBuilder.pyproj", "{8A3CBFB2-DE87-4955-B19F-219A7C8C6812}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{45426022-8454-452C-AD13-7C6178BD9B0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45426022-8454-452C-AD13-7C6178BD9B0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A3CBFB2-DE87-4955-B19F-219A7C8C6812}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A3CBFB2-DE87-4955-B19F-219A7C8C6812}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {841C62F3-7502-47C1-9650-00BD43D3AE0E}
+	EndGlobalSection
+EndGlobal
