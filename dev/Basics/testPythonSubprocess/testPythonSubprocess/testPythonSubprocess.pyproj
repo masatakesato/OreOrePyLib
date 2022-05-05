@@ -5,8 +5,7 @@
     <ProjectGuid>dcb4fbb8-7fb5-49ec-80d5-b23c392d2cfc</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <StartupFile>testPythonSubprocess_main.py</StartupFile>
-    <SearchPath>
-    </SearchPath>
+    <SearchPath>..\..\..\..\oreorepylib</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>testPythonSubprocess</Name>
