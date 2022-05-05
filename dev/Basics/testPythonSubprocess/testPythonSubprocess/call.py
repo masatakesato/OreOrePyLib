@@ -1,5 +1,6 @@
-﻿from utils import environment
-environment.AddPythonEnvironmentPaths( None )#pathlib.Path( sys.executable ).parents[0] )
+﻿import utils.environment
+#from utils import *#environment
+#environment.AddPythonEnvironmentPaths( pathlib.Path( sys.executable ) )#None )#
 
 import os
 import sys

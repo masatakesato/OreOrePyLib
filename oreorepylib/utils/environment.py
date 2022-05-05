@@ -17,9 +17,13 @@ def AddPythonEnvironmentPaths( executable=None ):
         "bin",
         )
 
-    envroot = pathlib.Path( executable if executable else sys.executable ).parents[0]#pathlib.Path( sys.executable ).parents[0]
+    envroot = pathlib.Path( sys.executable ).parents[0]#pathlib.Path( sys.executable ).parents[0]
 
     for subdir in subDirectories:
         subpath = pathlib.Path.joinpath( envroot, subdir )
-        #print( subpath )
+        print( subpath )
         os.environ["PATH"] += str(subpath) + ";"
+
+
+
+AddPythonEnvironmentPaths( pathlib.Path( sys.executable ) )#None )#
