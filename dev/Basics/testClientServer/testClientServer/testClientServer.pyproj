@@ -5,8 +5,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{82481ccb-bdcd-453b-b785-d3f91e0f17af}</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>testClientServer_main.py</StartupFile>
-    <SearchPath>..\..\..\..\..\OreOrePyLib</SearchPath>
+    <StartupFile>myServer.py</StartupFile>
+    <SearchPath>..\..\..\..\..\OreOrePyLib;..\..\..\..\..\..\Lib\umsgpack</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>testClientServer</Name>

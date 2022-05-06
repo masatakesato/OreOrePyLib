@@ -6,7 +6,7 @@
     <ProjectGuid>ad6dbc6e-f204-4861-b4de-8e19afc32219</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <StartupFile>testImageTransfer_main.py</StartupFile>
-    <SearchPath>..\..\..\..\..\OreOrePyLib</SearchPath>
+    <SearchPath>..\..\..\..\..\OreOrePyLib;..\..\..\..\..\..\Lib\umsgpack</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>testImageTransfer</Name>
