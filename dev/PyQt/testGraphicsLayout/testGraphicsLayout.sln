@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1705
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "testGraphicsLayout", "testGraphicsLayout\testGraphicsLayout.pyproj", "{00D8B1AE-8BD0-4CE3-96C6-7323322DE5AE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{00D8B1AE-8BD0-4CE3-96C6-7323322DE5AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00D8B1AE-8BD0-4CE3-96C6-7323322DE5AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9F02500F-EDA8-473B-9507-7051973E6079}
+	EndGlobalSection
+EndGlobal
