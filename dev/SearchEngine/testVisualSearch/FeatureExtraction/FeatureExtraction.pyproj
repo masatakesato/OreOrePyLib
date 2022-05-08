@@ -1,15 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>9218189b-3e3f-49c3-9c6b-c230ad9bc589</ProjectGuid>
-    <ProjectHome>.</ProjectHome>
-    <StartupFile>testNamedPipe.py</StartupFile>
-    <SearchPath>..\..\..\..\..\OreOrePyLib</SearchPath>
+    <ProjectGuid>0848053e-d4bb-4fae-abf2-e61ff7d1b7a0</ProjectGuid>
+    <ProjectHome>
+    </ProjectHome>
+    <StartupFile>extractFeature_main.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>testNamedPipe</Name>
-    <RootNamespace>testNamedPipe</RootNamespace>
+    <Name>FeatureExtraction</Name>
+    <RootNamespace>featureExtraction</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,9 +23,12 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="testNamedPipe.py" />
+    <Compile Include="extractFeature_main.py" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+  <ItemGroup />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
   <!-- Uncomment the CoreCompile target to enable the Build command in
        Visual Studio and specify your pre- and post-build commands in
        the BeforeBuild and AfterBuild targets below. -->
@@ -31,4 +37,5 @@
   </Target>
   <Target Name="AfterBuild">
   </Target>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>

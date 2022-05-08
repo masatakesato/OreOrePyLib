@@ -1,4 +1,4 @@
-﻿from .message_protocol import send_message, recieve_message, SendMessageError, RecieveMessageError
+﻿from .message_protocol import send_message, receive_message, SendMessageError, ReceiveMessageError
 from .serializer import Serializer
 
 import socket
@@ -44,11 +44,11 @@ class SSLClient():
                 # send message to server
                 send_message( self.__m_socket, send_data )
                 
-                # recieve data from server
-                recv_data = recieve_message( self.__m_socket )
+                # receive data from server
+                recv_data = receive_message( self.__m_socket )
 
                 if( not recv_data ):
-                    print( 'Client::call()... recieved data is None!' )
+                    print( 'Client::call()... received data is None!' )
                     raise socket.error#return None
                 
                 # deserialize and return
@@ -63,8 +63,8 @@ class SSLClient():
                 self.__m_socket = self.make_connection( self.__m_host, self.__m_port, self.__m_timeout, self.__m_trial )# 接続が切れたらリトライ
 
 
-            except RecieveMessageError as e:
-                print( 'Client::call()... RecieveMessageError occured.' )
+            except ReceiveMessageError as e:
+                print( 'Client::call()... ReceiveMessageError occured.' )
                 break
 
         return None

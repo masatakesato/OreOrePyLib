@@ -7,7 +7,7 @@ import traceback
 
 # exception handling
 class SendMessageError(Exception): pass
-class RecieveMessageError(Exception): pass
+class ReceiveMessageError(Exception): pass
 
 
 
@@ -41,10 +41,10 @@ def send_message( sock, msg ):
 
 
 
-def recieve_message( sock ):
+def receive_message( sock ):
     try:
         # Extract 4-byte length
-        raw_msglen = recieve_all( sock, 4 )
+        raw_msglen = receive_all( sock, 4 )
         if( not raw_msglen ):
             return None
         
@@ -52,17 +52,17 @@ def recieve_message( sock ):
         #msg_len = struct.unpack('>I', raw_msglen)[0]
     
         # Read message data
-        return recieve_all( sock, msg_len )
-        #return pickle.loads( recieve_all( sock, msg_len ), encoding='bytes' )
+        return receive_all( sock, msg_len )
+        #return pickle.loads( receive_all( sock, msg_len ), encoding='bytes' )
     except:
-        #print( 'Exception occured at recieve_message' )
+        #print( 'Exception occured at receive_message' )
         #traceback.print_exc()
-        raise RecieveMessageError( traceback.format_exc() )
+        raise ReceiveMessageError( traceback.format_exc() )
         return None#b''
 
 
-# helper function to recieve n bytes or return None if EOF is hit
-def recieve_all( sock , n ):
+# helper function to receive n bytes or return None if EOF is hit
+def receive_all( sock , n ):
     data = b''
     while( len(data) < n ):
         packet = sock.recv( n - len(data) )
@@ -83,7 +83,7 @@ def recieve_all( sock , n ):
 #BUFF_SIZE = 4096
 
 ## 先頭からしっぽまでメッセージの全パケットを受け取る
-#def recieve_all( sock ):
+#def receive_all( sock ):
 #    data = []
 #    while(True):
 #        packet = sock.recv( BUFF_SIZE )
@@ -94,17 +94,17 @@ def recieve_all( sock , n ):
 
 
 ## メッセージ内のフレーム1個分だけ読む. ホントは複数フレームあったら全て取り出したい
-#def recieve_message( sock ):
+#def receive_message( sock ):
 #    try:
-#        raw_data = recieve_all(sock)
+#        raw_data = receive_all(sock)
 #        if( not raw_data ):
 #            return None
 #        msg_len = struct.unpack_from('>I', raw_data)[0]
-#        print( 'recieve_message()...msg_len = ', msg_len )
+#        print( 'receive_message()...msg_len = ', msg_len )
 
 #        return raw_data[4: len(raw_data)]
         
 #    except:
-#        print( 'Exception occured at recieve_message' )
+#        print( 'Exception occured at receive_message' )
 #        traceback.print_exc()
 #        return None

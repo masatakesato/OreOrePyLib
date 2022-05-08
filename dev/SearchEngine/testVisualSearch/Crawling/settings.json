@@ -1,0 +1,6 @@
+﻿{
+    "crawl": {
+        "root_path": [ "L:/Library/composite/readymade/movie", "V:/testVideoDataset" ],
+        "types": [ "**/*.mp4", "**/*.mov", "**/*.avi" ]
+    }
+}

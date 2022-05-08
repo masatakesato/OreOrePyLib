@@ -1,0 +1,8 @@
+python testColorTransfer_main.py --source images/autumn.jpg --target images/fallingwater.jpg
+python testColorTransfer_main.py --source images/fallingwater.jpg --target images/autumn.jpg
+python testColorTransfer_main.py --source images/lego1.jpg --target images/lego2.jpg
+python testColorTransfer_main.py --source images/white.bmp --target images/white2.bmp
+python testColorTransfer_main.py --source images/night-4.jpg --target images/ocean_day.jpg
+python testColorTransfer_main.py --source images/ocean_day.jpg --target images/night-4.jpg
+python testColorTransfer_main.py --source images/src.png --target images/tgt.png
+python testColorTransfer_main.py --source images/src.png --target images/tgt_gray.png

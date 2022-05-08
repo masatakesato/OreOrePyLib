@@ -1,0 +1,7 @@
+﻿{
+    "crawl": {
+        "root_path": [ "./", "../../caffe/" ],
+        "types": [ "**/*.*" ],
+        "out_path": "./snapshot.pkl"
+    }
+}

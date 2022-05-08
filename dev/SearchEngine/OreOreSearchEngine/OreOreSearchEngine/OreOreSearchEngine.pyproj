@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4b7801aa-793b-42a3-97e8-2f25144b1e05}</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>OreOreSearchEngine_main.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>OreOreSearchEngine</Name>
+    <RootNamespace>OreOreSearchEngine</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="OreOreSearchEngine_main.py" />
+    <Compile Include="SearchEngine\Crawler.py" />
+    <Compile Include="SearchEngine\FileCrawler.py" />
+    <Compile Include="SearchEngine\FileInfo.py" />
+    <Compile Include="SearchEngine\Indexer.py" />
+    <Compile Include="SearchEngine\Searcher.py" />
+    <Compile Include="SearchEngine\Snapshot.py" />
+    <Compile Include="SearchEngine\__init__.py" />
+    <Compile Include="VideoSearch\calcFeature.py" />
+    <Compile Include="VideoSearch\Crawler.py" />
+    <Compile Include="VideoSearch\Indexer.py" />
+    <Compile Include="VideoSearch\Retrieval.py" />
+    <Compile Include="VideoSearch\Retrieval_main.py" />
+    <Compile Include="VideoSearch\SearchUI.py" />
+    <Compile Include="VideoSearch\video2Frame.py" />
+    <Compile Include="VideoSearch\__init__.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SearchEngine\" />
+    <Folder Include="VideoSearch\" />
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <!-- Uncomment the CoreCompile target to enable the Build command in
+       Visual Studio and specify your pre- and post-build commands in
+       the BeforeBuild and AfterBuild targets below. -->
+  <!--<Target Name="CoreCompile" />-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+</Project>

@@ -1,4 +1,4 @@
-﻿from .message_protocol import send_message, recieve_message, SendMessageError, RecieveMessageError
+﻿from .message_protocol import send_message, receive_message, SendMessageError, ReceiveMessageError
 from .serializer import Serializer
 from .proc_echo import EchoServer
 
@@ -57,8 +57,8 @@ class Server:
         #with sock:
         while True:
             try:
-                # recieve message from client
-                recv_data = recieve_message( sock )
+                # receive message from client
+                recv_data = receive_message( sock )
                 if( not recv_data ):
                     break
                         
@@ -83,8 +83,8 @@ class Server:
                 print( 'Server::send_recv()... SendMessageError occured.' )
                 break
 
-            except RecieveMessageError as e:
-                print( 'Server::send_recv()... RecieveMessageError occured.' )
+            except ReceiveMessageError as e:
+                print( 'Server::send_recv()... ReceiveMessageError occured.' )
                 break
 
             except:
@@ -128,11 +128,11 @@ class Server:
 #        with conn:
 #            while True:
 #                try:
-#                    # recieve message from client
-#                    recv_data = recieve_message( conn )
+#                    # receive message from client
+#                    recv_data = receive_message( conn )
 #                    if not recv_data:
 #                        break
-#                    print( 'server recieved: {}'.format(recv_data) )
+#                    print( 'server received: {}'.format(recv_data) )
 
 #                    # TODO: Do something here
                     

@@ -7,6 +7,13 @@ import win32con
 import ctypes
 import ctypes.wintypes
 
+import traceback
+
+import oreorepylib.utils.environment
+from oreorepylib.network.message_protocol import SendMessageError, ReceiveMessageError
+
+
+
 
 def pipe_server():
 
@@ -84,31 +91,40 @@ def pipe_client():
 
 
     print( "--------------------------" )
+
+    maxtrials = 5
+    trial = 0
+
     while True:
-        #resp = win32file.ReadFile(handle, 64*1024)
 
-        data = (ctypes.c_byte * 64 * 1024)()
-        byteread = ctypes.wintypes.DWORD()
+        try:
+            #resp = win32file.ReadFile(handle, 64*1024)
+            data = (ctypes.c_byte * 64 * 1024)()
+            byteread = ctypes.wintypes.DWORD()
         
-        # https://github.com/ipython/ipython/blob/master/IPython/utils/_process_win32_controller.py
-        if( not ctypes.windll.kernel32.ReadFile( handle, data, 64*1024, ctypes.byref(byteread), None ) ):
-            print( "Failed reading from named pipe." )
+
+            # https://github.com/ipython/ipython/blob/master/IPython/utils/_process_win32_controller.py
+            if( not ctypes.windll.kernel32.ReadFile( handle, data, 64*1024, ctypes.byref(byteread), None ) ):
+                raise ReceiveMessageError( traceback.format_exc() )
+                print( "Failed reading from named pipe." )
+                #raise ctypes.WinError()
+
+            #dataからbytearrayへ# https://stackoverflow.com/questions/29291624/python-convert-ctypes-ubyte-array-to-string/29293102#29293102
+            filename = ctypes.cast( data, ctypes.c_char_p )
+            print( "client received message:", filename.value )
+            #print(f"message: {data.value}")
+
+
+        except SendMessageError as e:#pywintypes.error as e:
+            print( 'Client::call()... SendMessageError occured.' )
+            trial += 1
+            if( trial >= maxtrials ): break
+
+
+        except ReceiveMessageError as e:
+            print( 'Client::call()... ReceiveMessageError occured.' )
             break
-            #raise ctypes.WinError()
 
-        #dataからbytearrayへ# https://stackoverflow.com/questions/29291624/python-convert-ctypes-ubyte-array-to-string/29293102#29293102
-        filename = ctypes.cast( data, ctypes.c_char_p )
-        print( "cliend recieved message:", filename.value )
-        #print(f"message: {data.value}")
-
-
-
-
-    #while not quit:
-    #    try:
-
-
-    #    except Exception as e:#pywintypes.error as e:
 
     #        if( e.args[0] == 2 ):
     #            print("no pipe, trying again in a sec")

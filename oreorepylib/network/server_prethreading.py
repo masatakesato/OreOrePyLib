@@ -1,4 +1,4 @@
-﻿from .message_protocol import send_message, recieve_message, SendMessageError, RecieveMessageError
+﻿from .message_protocol import send_message, receive_message, SendMessageError, ReceiveMessageError
 from .serializer import Serializer
 from .proc_echo import EchoServer
 
@@ -89,8 +89,8 @@ class ServerPrethreading:
             try:
                 #remote_host, remote_remport = sock.getpeername()
                 #print('<{}>Client:{}:{}'.format(ident, remote_host, remote_remport))
-                # recieve message from client
-                recv_data = recieve_message( sock )
+                # receive message from client
+                recv_data = receive_message( sock )
                 if( not recv_data ):
                     break
                         
@@ -114,8 +114,8 @@ class ServerPrethreading:
                 print( 'Server::send_recv()... SendMessageError occured.' )
                 break
 
-            except RecieveMessageError as e:
-                print( 'Server::send_recv()... RecieveMessageError occured.' )
+            except ReceiveMessageError as e:
+                print( 'Server::send_recv()... ReceiveMessageError occured.' )
                 break
 
             except:
