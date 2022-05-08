@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1705
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "testCollapsibleWidget", "testCollapsibleWidget\testCollapsibleWidget.pyproj", "{08A13306-A408-4827-928C-8FFFE742A2BF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{08A13306-A408-4827-928C-8FFFE742A2BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08A13306-A408-4827-928C-8FFFE742A2BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {15D8D06D-C59A-4FC0-9E2D-B83229616C8C}
+	EndGlobalSection
+EndGlobal
