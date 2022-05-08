@@ -2,7 +2,7 @@
 
 import time
 import sys
-import win32pipe, win32file, pywintypes
+#import win32pipe, win32file, pywintypes
 import win32con
 import ctypes
 import ctypes.wintypes
@@ -19,30 +19,52 @@ def pipe_server():
 
     print("pipe server")
     count = 0
-    pipe = win32pipe.CreateNamedPipe(
+
+    #pipe = win32pipe.CreateNamedPipe(
+    #    r'\\.\pipe\Foo',
+    #    win32pipe.PIPE_ACCESS_DUPLEX,
+    #    win32pipe.PIPE_TYPE_MESSAGE | win32pipe.PIPE_READMODE_MESSAGE | win32pipe.PIPE_WAIT,
+    #    1, 65536, 65536,
+    #    0,
+    #    None)
+
+
+    pipe = ctypes.windll.kernel32.CreateNamedPipeW(
         r'\\.\pipe\Foo',
-        win32pipe.PIPE_ACCESS_DUPLEX,
-        win32pipe.PIPE_TYPE_MESSAGE | win32pipe.PIPE_READMODE_MESSAGE | win32pipe.PIPE_WAIT,
+        win32con.PIPE_ACCESS_DUPLEX,
+        win32con.PIPE_TYPE_MESSAGE | win32con.PIPE_READMODE_MESSAGE | win32con.PIPE_WAIT,
         1, 65536, 65536,
         0,
-        None)
+        None )
+
+    print( "owner pipe handle:", pipe )
+
     try:
         print("waiting for client")
-        win32pipe.ConnectNamedPipe(pipe, None)
+        #win32pipe.ConnectNamedPipe( pipe, None )
+        ctypes.windll.kernel32.ConnectNamedPipe( pipe, None )
+
         print("got client")
 
         while count < 10:
             print( f"writing message {count}" )
             # convert to bytes
             some_data = str.encode( f"{count}" )
-            win32file.WriteFile( pipe, some_data )
+
+            #win32file.WriteFile( pipe, some_data )
+            numBytes = ctypes.wintypes.DWORD()
+            bsuccess = ctypes.windll.kernel32.WriteFile( pipe, some_data, len(some_data), ctypes.byref(numBytes), None )
+
+            if( not bsuccess ):
+                raise ctypes.WinError()
+
             time.sleep(1)
             count += 1
 
         print("finished now")
     finally:
-        win32file.CloseHandle(pipe)
-
+        #win32file.CloseHandle( pipe )
+        ctypes.windll.kernel32.CloseHandle( pipe )
 
 
 
@@ -75,6 +97,7 @@ def pipe_client():
         None
     )
 
+    print( "user pipe handle:", handle )
 
     # CHeck error after file creation
     err = ctypes.GetLastError()
