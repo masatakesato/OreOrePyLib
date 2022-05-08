@@ -17,8 +17,8 @@ if __name__=='__main__':
 
     #server = oreoreRPC.Server( AddServer() )
     #server = oreoreRPC.SSLServer( AddServer() )
-    server = oreoreRPC.ServerThreading( AddServer() )# server_threading.ServerThreading( AddServer() )
-    #server = oreoreRPC.ServerPrethreading( AddServer() )
+    #server = oreoreRPC.ServerThreading( AddServer() )# server_threading.ServerThreading( AddServer() )
+    server = oreoreRPC.ServerPrethreading( AddServer(), 6 )
 
     try:
         server.listen( host='localhost', port=5007, backlog=10 )

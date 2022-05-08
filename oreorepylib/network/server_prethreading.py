@@ -17,13 +17,14 @@ import traceback
 
 class ServerPrethreading:
     
-    def __init__( self, proc=EchoServer(), pack_encoding=None, unpack_encoding=None ):
+    def __init__( self, proc=EchoServer(), numthreads=4, pack_encoding=None, unpack_encoding=None ):
         self.__m_Address = None
         self.__m_Backlog = 1
         self.__m_ProcInstance = proc
         self.__m_Socket = None
         self.__m_Serializer = Serializer( pack_encoding=pack_encoding, unpack_encoding=unpack_encoding )
         
+        self.__m_NumThreads = numthreads
         self.__m_ThreadList = []
         self.__m_Lock = threading.Lock()
 
@@ -49,7 +50,7 @@ class ServerPrethreading:
 
     def run( self ):
         
-        for _ in range(4):
+        for _ in range( self.__m_NumThreads ):
             thread = threading.Thread(target=self.accept, args=( self.__m_Socket, ) )
             thread.start()
             self.__m_ThreadList.append( thread )

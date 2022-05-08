@@ -7,6 +7,8 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "testClientServer", "testCli
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "testImageTransfer", "testImageTransfer\testImageTransfer.pyproj", "{AD6DBC6E-F204-4861-B4DE-8E19AFC32219}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "testPeerToPeer", "testPeerToPeer\testPeerToPeer.pyproj", "{38553E72-FE9B-4E3E-B436-265ACE87C400}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,8 @@ Global
 		{82481CCB-BDCD-453B-B785-D3F91E0F17AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD6DBC6E-F204-4861-B4DE-8E19AFC32219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AD6DBC6E-F204-4861-B4DE-8E19AFC32219}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38553E72-FE9B-4E3E-B436-265ACE87C400}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38553E72-FE9B-4E3E-B436-265ACE87C400}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
