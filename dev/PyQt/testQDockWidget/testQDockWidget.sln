@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.757
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "testQDockWidget", "testQDockWidget\testQDockWidget.pyproj", "{C65484CC-E19E-4995-8149-39FCE3299AA8}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "testQDockWidgetMulti", "testQDockWidgetMulti\testQDockWidgetMulti.pyproj", "{EA298964-171D-45BB-8F8C-75CB7D72F95F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C65484CC-E19E-4995-8149-39FCE3299AA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C65484CC-E19E-4995-8149-39FCE3299AA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA298964-171D-45BB-8F8C-75CB7D72F95F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA298964-171D-45BB-8F8C-75CB7D72F95F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3D31F296-8F61-480B-B948-0522AEEBB0FE}
+	EndGlobalSection
+EndGlobal

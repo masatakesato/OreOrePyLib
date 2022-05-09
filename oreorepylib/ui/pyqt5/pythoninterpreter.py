@@ -5,7 +5,6 @@ import re
 import sys
 import code
 from rlcompleter import Completer
-import time
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -478,32 +477,6 @@ class StdoutRedirect(QObject):
 
 
 
-class QThread1( QThread ):
-
-    sig1 = pyqtSignal(str, bool)
-    sig_quit = pyqtSignal()#
-
-    def __init__( self, parent=None ):
-        QThread.__init__(self, parent)
-        self.msg = ""
-        self.isError = False
-
-        self.mutex=QMutex()
-
-
-    def setValue( self, msg, isError ):
-        self.msg = msg
-        self.isError = isError
-
-
-    def run( self ):
-        self.sig1.emit( self.msg, self.isError )
-        self.usleep(1)
-
-        self.sig_quit.emit()
-
-
-
 class OutputConsole(QTextEdit):
 
     COLOR = { False: QColor(255, 127, 39), True: QColor(255, 0, 0) }# hard-coded text color from g_TextFieldStyleSheet.
@@ -518,15 +491,9 @@ class OutputConsole(QTextEdit):
         # member variable     
         self._stdout = StdoutRedirect()
         self._stdout.Start()
-        self._stdout.printSignal.connect( self.__AppendTextAsync )
+        self._stdout.printSignal.connect( self.__AppendText )
  
         self.setReadOnly( True )
-
-
-        self.threadIter = QThread1()
-        self.threadIter.sig1.connect( self.__AppendText )
-        #threadIter.sig_quit.connect( self.unlock_button )
-
 
 
 
@@ -554,23 +521,4 @@ class OutputConsole(QTextEdit):
         QApplication.processEvents(QEventLoop.ExcludeUserInputEvents)
 
 
-
-    def __AppendTextAsync( self, msg, isError ):
-                
-    #    from threading import Thread
-
-    #    thread = Thread( target=self.__AppendText, args=(msg, isError) )
-    #    thread.start()
-
-        while( self.threadIter.isRunning() ):
-            pass
-        #self.threadIter = QThread1()
-        self.threadIter.setValue( msg, isError )
-        #self.threadIter.sig1.connect( self.__AppendText )
-        ##threadIter.sig_quit.connect( self.unlock_button )
-        self.threadIter.start()#self.threadIter.run()#
-        #self.threadIter.wait()
-
-
-
-https://stackoverflow.com/questions/21071448/redirecting-stdout-and-stderr-to-a-pyqt4-qtextedit-from-a-secondary-thread
+        
