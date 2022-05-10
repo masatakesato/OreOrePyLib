@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>9218189b-3e3f-49c3-9c6b-c230ad9bc589</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>tttt.py</StartupFile>
+    <StartupFile>ttttclient.py</StartupFile>
     <SearchPath>..\..\..\..\..\OreOrePyLib</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>

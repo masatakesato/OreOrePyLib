@@ -182,7 +182,7 @@ class PipeClient:
             return
 
 
-        result = Kernel32.ConnectNamedPipe( self.__m_PipeHandle, None )
+        #result = Kernel32.ConnectNamedPipe( self.__m_PipeHandle, None )
 
         print( "Successfully connected to named pipe:", self.__m_PipeName )
 
@@ -206,7 +206,7 @@ class PipeClient:
         while( trial < self.__m_MaxTrials ):
             try:
 
-                #print( f"writing message {count}" )
+                print( f"writing message {trial}" )
                 # convert to bytes
                 #msg = str.encode( f"{count}" )
 

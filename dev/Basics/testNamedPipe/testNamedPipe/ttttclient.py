@@ -13,16 +13,21 @@ if __name__=="__main__":
    
     input_text = ""
 
-    while( input_text != "quit" ):
+    while( True ):
 
         input_text = input(">")
-        #print( ">" + input_text )
 
-        if( input_text=="disconnect" ):
+        if( input_text == "quit" ):
+            break
+
+        elif( input_text=="disconnect" ):
             client.disconnect()
+
         elif( input_text=="connect" ):
             client.connect( r"\\.\pipe\Foo" )
 
+        else:
+            client.send( input_text.encode() )
 
     #client.send( "Message from client".encode() )
 
