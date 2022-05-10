@@ -14,6 +14,8 @@
 import oreorepylib.utils.environment
 
 import traceback
+
+import struct
 import win32con
 import ctypes
 from ctypes.wintypes import DWORD
@@ -22,6 +24,108 @@ from oreorepylib.network.message_protocol import SendMessageError, ReceiveMessag
 
 
 Kernel32 = ctypes.windll.kernel32
+
+
+
+
+
+
+def send_message( pipe_handle, msg ):
+
+    try:
+        if( not msg ):  return
+
+        numBytes = DWORD()
+        # send data length
+        if( not Kernel32.WriteFile( pipe_handle, struct.pack( 'I', len(msg) ), 4, None, None ) ):
+            raise SendMessageError()
+
+        # send data
+        result = Kernel32.WriteFile( pipe_handle, msg, len(msg), ctypes.byref(numBytes), None )#win32file.WriteFile( pipe, msg )
+
+        if( not result ):
+            raise SendMessageError()#ctypes.WinError()
+
+    except:
+        print( 'send_message... Error occured.' )
+
+
+
+
+def receive_message( pipe_handle ):
+    try:
+        # Extract 4-byte length
+        numBytes = DWORD(4)
+        #result = Kernel32.PeekNamedPipe( pipe_handle, None, 0, None, ctypes.byref(numBytes), None )
+        result = Kernel32.ReadFile( pipe_handle, None, 0, ctypes.byref(numBytes), None )
+        if( not result ):
+            raise Exception()
+
+        msglen = int( numBytes ) #receive_all( pipe_handle, 4 )
+        if( not msglen ):
+            return None
+        
+        # Read message data
+        return receive_all( pipe_handle, msg_len )
+        
+## TODO: Read buffer size first
+#                Kernel32.ReadFile( self.__m_PipeHandle, ctypes.byref(byteread), 4, None, None )
+#                print( "DatSize:", byteread )
+
+## TODO: Then read actual buffer
+#                # https://github.com/ipython/ipython/blob/master/IPython/utils/_process_win32_controller.py
+#                if( not Kernel32.ReadFile( self.__m_PipeHandle, data, 64*1024, ctypes.byref(byteread), None ) ):
+#                    break
+
+
+
+    except:
+        #print( 'Exception occured at receive_message' )
+        #traceback.print_exc()
+        raise ReceiveMessageError( traceback.format_exc() )
+        return None#b''
+
+
+# helper function to receive n bytes or return None if EOF is hit
+def receive_all( pipe_handle, n ):
+
+    data = b''
+
+
+
+
+    while( len(data) < n ):
+        packet = pipe_handle.recv( n - len(data) )
+        if( not packet ):
+            return None
+        data += packet
+        #print( packet, n - len(data) )
+
+    #print( data )
+    return data
+
+
+
+
+
+#data = (ctypes.c_byte * 64 * 1024)()
+#byteread = DWORD()
+
+## https://github.com/ipython/ipython/blob/master/IPython/utils/_process_win32_controller.py
+#if( not Kernel32.ReadFile( self.__m_PipeHandle, data, 64*1024, ctypes.byref(byteread), None ) ):
+#    break
+#    #err = ctypes.GetLastError()
+#    #print( "Error occured while ReadFile...", err )# 109 pipe 終了しました.
+#    #raise ReceiveMessageError( traceback.format_exc() )#raise ctypes.WinError()
+
+##dataからbytearrayへ# https://stackoverflow.com/questions/29291624/python-convert-ctypes-ubyte-array-to-string/29293102#29293102
+#char_array = ctypes.cast( data, ctypes.c_char_p )
+#print( ">", char_array.value )
+##print(f"message: {data.value}")
+
+
+
+
 
 
 
@@ -109,14 +213,22 @@ class PipeServer:
 
             try:
                 data = (ctypes.c_byte * 64 * 1024)()
-                byteread = DWORD()
+                msg_len = DWORD()
 
+                #Kernel32.PeekNamedPipe( self.__m_PipeHandle, None, 0, None, ctypes.byref(byteread), None )
+
+# TODO: Read buffer size first
+                Kernel32.ReadFile( self.__m_PipeHandle, ctypes.byref(msg_len), 4, None, None )
+                print( "message length:", msg_len.value )
+
+# TODO: Then read actual buffer
                 # https://github.com/ipython/ipython/blob/master/IPython/utils/_process_win32_controller.py
-                if( not Kernel32.ReadFile( self.__m_PipeHandle, data, 64*1024, ctypes.byref(byteread), None ) ):
+                if( not Kernel32.ReadFile( self.__m_PipeHandle, data, msg_len, ctypes.byref(msg_len), None ) ):
                     break
                     #err = ctypes.GetLastError()
                     #print( "Error occured while ReadFile...", err )# 109 pipe 終了しました.
                     #raise ReceiveMessageError( traceback.format_exc() )#raise ctypes.WinError()
+                #print( "ReadFile:", msg_len )
 
                 #dataからbytearrayへ# https://stackoverflow.com/questions/29291624/python-convert-ctypes-ubyte-array-to-string/29293102#29293102
                 char_array = ctypes.cast( data, ctypes.c_char_p )
@@ -208,14 +320,24 @@ class PipeClient:
 
                 print( f"writing message {trial}" )
                 # convert to bytes
-                #msg = str.encode( f"{count}" )
+                ##msg = str.encode( f"{count}" )
 
-                #win32file.WriteFile( pipe, msg )
-                numBytes = DWORD()
-                result = ctypes.windll.kernel32.WriteFile( self.__m_PipeHandle, msg, len(msg), ctypes.byref(numBytes), None )
+                
+                #numBytes = DWORD( len(msg) )
+                #print( numBytes, len(msg) )
+                #result = ctypes.windll.kernel32.WriteFile( self.__m_PipeHandle,
+                #                                          struct.pack( 'I', len(msg) ),
+                #                                          4, ctypes.byref(numBytes), None )
 
-                if( not result ):
-                    raise SendMessageError()#ctypes.WinError()
+                #result = ctypes.windll.kernel32.WriteFile( self.__m_PipeHandle, msg, len(msg), ctypes.byref(numBytes), None )#win32file.WriteFile( pipe, msg )
+                ##print( numBytes )
+
+                #if( not result ):
+                #    raise SendMessageError()#ctypes.WinError()
+
+
+                send_message( self.__m_PipeHandle, msg )
+
 
                 return
 
