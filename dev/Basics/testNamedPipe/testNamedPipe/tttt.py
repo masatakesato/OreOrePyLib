@@ -41,15 +41,13 @@ def send_message( pipe_handle, msg ):
 
     if( not msg ):  return
 
-    numBytes = DWORD()
     # send data length
     if( not Kernel32.WriteFile( pipe_handle, struct.pack( 'I', len(msg) ), 4, None, None ) ):
         raise SendMessageError()
 
     # send data
-    result = Kernel32.WriteFile( pipe_handle, msg, len(msg), ctypes.byref(numBytes), None )#win32file.WriteFile( pipe, msg )
-
-    if( not result ):
+    #numBytes = DWORD()
+    if( not Kernel32.WriteFile( pipe_handle, msg, len(msg), None, None ) ):#ctypes.byref(numBytes), None )#win32file.WriteFile( pipe, msg )
         raise SendMessageError()#ctypes.WinError()
 
 
@@ -180,24 +178,8 @@ class PipeServer:
         while( self.__m_IsListening ):
 
             try:
-                # Read buffer size first
-                #msg_len = DWORD()
-                #Kernel32.ReadFile( self.__m_PipeHandle, ctypes.byref(msg_len), 4, None, None )
-                #print( "message length:", msg_len.value )
-
-                ## Then read actual buffer
-                ## https://github.com/ipython/ipython/blob/master/IPython/utils/_process_win32_controller.py
-                #data = ( ctypes.c_byte * msg_len.value )()#64 * 1024)()
-                #if( not Kernel32.ReadFile( self.__m_PipeHandle, data, msg_len, ctypes.byref(msg_len), None ) ):
-                #    break
-                #    #err = ctypes.GetLastError()
-                #    #print( "Error occured while ReadFile...", err )# 109 pipe 終了しました.
-                #    #raise ReceiveMessageError( traceback.format_exc() )#raise ctypes.WinError()
-                ##print( "ReadFile:", msg_len )
-
 
                 data = receive_message( self.__m_PipeHandle )
-
 
                 #dataからbytearrayへ# https://stackoverflow.com/questions/29291624/python-convert-ctypes-ubyte-array-to-string/29293102#29293102
                 char_array = ctypes.cast( data, ctypes.c_char_p )
@@ -289,22 +271,7 @@ class PipeClient:
                 # convert to bytes
                 ##msg = str.encode( f"{count}" )
 
-                
-                #numBytes = DWORD( len(msg) )
-                #print( numBytes, len(msg) )
-                #result = ctypes.windll.kernel32.WriteFile( self.__m_PipeHandle,
-                #                                          struct.pack( 'I', len(msg) ),
-                #                                          4, ctypes.byref(numBytes), None )
-
-                #result = ctypes.windll.kernel32.WriteFile( self.__m_PipeHandle, msg, len(msg), ctypes.byref(numBytes), None )#win32file.WriteFile( pipe, msg )
-                ##print( numBytes )
-
-                #if( not result ):
-                #    raise SendMessageError()#ctypes.WinError()
-
-
                 send_message( self.__m_PipeHandle, msg )
-
 
                 return
 
