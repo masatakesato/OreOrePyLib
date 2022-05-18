@@ -5,6 +5,8 @@ import threading
 import time
 
 
+g_PipeName = r"\\.\pipe\Foo"
+
 
 if __name__=="__main__":
 
@@ -24,7 +26,7 @@ if __name__=="__main__":
             client.disconnect()
 
         elif( input_text=="connect" ):
-            client.connect( r"\\.\pipe\Foo" )
+            client.connect( g_PipeName )
 
         else:
             client.send( input_text.encode() )

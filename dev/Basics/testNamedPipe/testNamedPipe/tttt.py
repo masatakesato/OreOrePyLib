@@ -11,6 +11,13 @@
 # サーバーからの受信は無限ループでポーリングして待つ
 # ポーリングは別スレッドに分離しておく
 
+
+# https://www.kazetest.com/vcmemo/pipe/pipe.htm
+# 複数クライアントを扱う場合は、
+#   ->CreateNamedPipeWでnMaxInstancesを2以上にする
+#   ->マルチスレッド化が必須
+
+
 import oreorepylib.utils.environment
 
 import traceback
@@ -32,99 +39,60 @@ Kernel32 = ctypes.windll.kernel32
 
 def send_message( pipe_handle, msg ):
 
-    try:
-        if( not msg ):  return
+    if( not msg ):  return
 
-        numBytes = DWORD()
-        # send data length
-        if( not Kernel32.WriteFile( pipe_handle, struct.pack( 'I', len(msg) ), 4, None, None ) ):
-            raise SendMessageError()
+    numBytes = DWORD()
+    # send data length
+    if( not Kernel32.WriteFile( pipe_handle, struct.pack( 'I', len(msg) ), 4, None, None ) ):
+        raise SendMessageError()
 
-        # send data
-        result = Kernel32.WriteFile( pipe_handle, msg, len(msg), ctypes.byref(numBytes), None )#win32file.WriteFile( pipe, msg )
+    # send data
+    result = Kernel32.WriteFile( pipe_handle, msg, len(msg), ctypes.byref(numBytes), None )#win32file.WriteFile( pipe, msg )
 
-        if( not result ):
-            raise SendMessageError()#ctypes.WinError()
-
-    except:
-        print( 'send_message... Error occured.' )
+    if( not result ):
+        raise SendMessageError()#ctypes.WinError()
 
 
 
 
 def receive_message( pipe_handle ):
-    try:
-        # Extract 4-byte length
-        numBytes = DWORD(4)
-        #result = Kernel32.PeekNamedPipe( pipe_handle, None, 0, None, ctypes.byref(numBytes), None )
-        result = Kernel32.ReadFile( pipe_handle, None, 0, ctypes.byref(numBytes), None )
-        if( not result ):
-            raise Exception()
 
-        msglen = int( numBytes ) #receive_all( pipe_handle, 4 )
-        if( not msglen ):
-            return None
-        
-        # Read message data
-        return receive_all( pipe_handle, msg_len )
-        
-## TODO: Read buffer size first
-#                Kernel32.ReadFile( self.__m_PipeHandle, ctypes.byref(byteread), 4, None, None )
-#                print( "DatSize:", byteread )
-
-## TODO: Then read actual buffer
-#                # https://github.com/ipython/ipython/blob/master/IPython/utils/_process_win32_controller.py
-#                if( not Kernel32.ReadFile( self.__m_PipeHandle, data, 64*1024, ctypes.byref(byteread), None ) ):
-#                    break
-
-
-
-    except:
-        #print( 'Exception occured at receive_message' )
-        #traceback.print_exc()
+    # Read buffer size first
+    msg_len = DWORD()
+    if( not Kernel32.ReadFile( pipe_handle, ctypes.byref(msg_len), 4, None, None ) ):
         raise ReceiveMessageError( traceback.format_exc() )
         return None#b''
 
-
-# helper function to receive n bytes or return None if EOF is hit
-def receive_all( pipe_handle, n ):
-
-    data = b''
+    #print( "message length:", msg_len.value )
+    #if( msg_len.value==0 ):
+    #    return None
 
 
+    # Then read actual buffer#return receive_all( pipe_handle, msg_len )
+    # https://github.com/ipython/ipython/blob/master/IPython/utils/_process_win32_controller.py
+    data = ( ctypes.c_byte * msg_len.value )()#64 * 1024)()
+    if( not Kernel32.ReadFile( pipe_handle, data, msg_len, ctypes.byref(msg_len), None ) ):
+        raise ReceiveMessageError( traceback.format_exc() )
+        return None#b''
 
-
-    while( len(data) < n ):
-        packet = pipe_handle.recv( n - len(data) )
-        if( not packet ):
-            return None
-        data += packet
-        #print( packet, n - len(data) )
-
-    #print( data )
     return data
 
 
 
+# helper function to receive n bytes or return None if EOF is hit
+#def receive_all( pipe_handle, n ):
 
+#    data = b''
 
-#data = (ctypes.c_byte * 64 * 1024)()
-#byteread = DWORD()
+#    while( len(data) < n ):
+#        packet = pipe_handle.recv( n - len(data) )
+#        if( not packet ):
+#            return None
+#        data += packet
+#        #print( packet, n - len(data) )
 
-## https://github.com/ipython/ipython/blob/master/IPython/utils/_process_win32_controller.py
-#if( not Kernel32.ReadFile( self.__m_PipeHandle, data, 64*1024, ctypes.byref(byteread), None ) ):
-#    break
-#    #err = ctypes.GetLastError()
-#    #print( "Error occured while ReadFile...", err )# 109 pipe 終了しました.
-#    #raise ReceiveMessageError( traceback.format_exc() )#raise ctypes.WinError()
-
-##dataからbytearrayへ# https://stackoverflow.com/questions/29291624/python-convert-ctypes-ubyte-array-to-string/29293102#29293102
-#char_array = ctypes.cast( data, ctypes.c_char_p )
-#print( ">", char_array.value )
-##print(f"message: {data.value}")
-
-
-
+#    #print( data )
+#    return data
 
 
 
@@ -159,7 +127,7 @@ class PipeServer:
         self.__m_PipeHandle = Kernel32.CreateNamedPipeW(
             self.__m_PipeName, #r'\\.\pipe\Foo',
             win32con.PIPE_ACCESS_DUPLEX,
-            win32con.PIPE_TYPE_MESSAGE | win32con.PIPE_READMODE_MESSAGE | win32con.PIPE_WAIT,
+            win32con.PIPE_TYPE_BYTE | win32con.PIPE_READMODE_BYTE | win32con.PIPE_WAIT,
             1, 65536, 65536,
             0,
             None )
@@ -212,23 +180,24 @@ class PipeServer:
         while( self.__m_IsListening ):
 
             try:
-                data = (ctypes.c_byte * 64 * 1024)()
-                msg_len = DWORD()
+                # Read buffer size first
+                #msg_len = DWORD()
+                #Kernel32.ReadFile( self.__m_PipeHandle, ctypes.byref(msg_len), 4, None, None )
+                #print( "message length:", msg_len.value )
 
-                #Kernel32.PeekNamedPipe( self.__m_PipeHandle, None, 0, None, ctypes.byref(byteread), None )
+                ## Then read actual buffer
+                ## https://github.com/ipython/ipython/blob/master/IPython/utils/_process_win32_controller.py
+                #data = ( ctypes.c_byte * msg_len.value )()#64 * 1024)()
+                #if( not Kernel32.ReadFile( self.__m_PipeHandle, data, msg_len, ctypes.byref(msg_len), None ) ):
+                #    break
+                #    #err = ctypes.GetLastError()
+                #    #print( "Error occured while ReadFile...", err )# 109 pipe 終了しました.
+                #    #raise ReceiveMessageError( traceback.format_exc() )#raise ctypes.WinError()
+                ##print( "ReadFile:", msg_len )
 
-# TODO: Read buffer size first
-                Kernel32.ReadFile( self.__m_PipeHandle, ctypes.byref(msg_len), 4, None, None )
-                print( "message length:", msg_len.value )
 
-# TODO: Then read actual buffer
-                # https://github.com/ipython/ipython/blob/master/IPython/utils/_process_win32_controller.py
-                if( not Kernel32.ReadFile( self.__m_PipeHandle, data, msg_len, ctypes.byref(msg_len), None ) ):
-                    break
-                    #err = ctypes.GetLastError()
-                    #print( "Error occured while ReadFile...", err )# 109 pipe 終了しました.
-                    #raise ReceiveMessageError( traceback.format_exc() )#raise ctypes.WinError()
-                #print( "ReadFile:", msg_len )
+                data = receive_message( self.__m_PipeHandle )
+
 
                 #dataからbytearrayへ# https://stackoverflow.com/questions/29291624/python-convert-ctypes-ubyte-array-to-string/29293102#29293102
                 char_array = ctypes.cast( data, ctypes.c_char_p )
@@ -286,15 +255,13 @@ class PipeClient:
             print( "error check afer client::CreateFileW:", ctypes.GetLastError(), self.__m_PipeHandle )
             return
 
-        lpMode = DWORD( win32con.PIPE_READMODE_MESSAGE )
+        lpMode = DWORD( win32con.PIPE_READMODE_BYTE )#win32con.PIPE_READMODE_MESSAGE )
         res = Kernel32.SetNamedPipeHandleState( self.__m_PipeHandle, ctypes.byref(lpMode), None, None )
 
         if( res == 0 ):
             print(f"SetNamedPipeHandleState return code: {ctypes.GetLastError()}")
             return
 
-
-        #result = Kernel32.ConnectNamedPipe( self.__m_PipeHandle, None )
 
         print( "Successfully connected to named pipe:", self.__m_PipeName )
 
