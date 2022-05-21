@@ -9,7 +9,7 @@ g_OutPipeName = r"\\.\pipe\Foo2"
 if __name__=="__main__":
 
     node = HalfDuplexNode( g_InPipeName )
-
+    node.StartListen()
    
     input_text = ""
 

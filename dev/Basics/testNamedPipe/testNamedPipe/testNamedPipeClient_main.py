@@ -28,12 +28,6 @@ if __name__=="__main__":
         elif( input_text=="connect" ):
             client.connect( g_PipeName )
 
-        elif( input_text=="startlisten" ):
-            client.startListen()
-
-        elif( input_text=="stoplisten" ):
-            client.stopListen()
-
         else:
             client.send( input_text.encode() )
 

@@ -12,7 +12,7 @@ class HalfDuplexNode:
         self.__m_Receiver = PipeServer( in_pipe_name )
         self.__m_Sender = PipeClient()
 
-        self.__m_IsListening = True
+        self.__m_IsListening = False
         self.__m_ListenThread = None
 
 
@@ -45,6 +45,10 @@ class HalfDuplexNode:
 
     def StartListen( self ):
 
+        if( self.__m_IsListening ):
+            print("already listening...")
+            return
+
         self.__m_IsListening = True
         self.__m_ListenThread = threading.Thread( target=self.__m_Receiver.run )
         self.__m_ListenThread.start()
@@ -54,6 +58,9 @@ class HalfDuplexNode:
 
 
     def StopListen( self ):
+        
+        self.__m_Receiver.ReleasePipe()
+
         self.__m_IsListening = False
 
         if( self.__m_ListenThread ):

@@ -106,21 +106,18 @@ class PipeServer:
 
         self.__m_PipeHandle = None
 
-
         self.InitPipe()
 
 
 
     def __del__( self ):
-        if( self.__m_PipeHandle ):
-            Kernel32.DisconnectNamedPipe ( self.__m_PipeHandle )
-            Kernel32.CloseHandle( self.__m_PipeHandle )
+        self.ReleasePipe()
 
 
 
     def InitPipe( self ):
 
-        # TODO: disconnect existing named pipe
+        # Disconnect existing named pipe
         self.ReleasePipe()
 
         self.__m_PipeHandle = Kernel32.CreateNamedPipeW(
@@ -138,16 +135,34 @@ class PipeServer:
             self.__m_PipeHandle = None
             return
 
-
         print( "Successfully created named pipe:", self.__m_PipeName )
 
 
 
     def ReleasePipe( self ):
         if( self.__m_PipeHandle ):
+
+            h = Kernel32.CreateFileW(
+                self.__m_PipeName,
+                win32con.GENERIC_READ | win32con.GENERIC_WRITE,
+                0,
+                None,
+                win32con.OPEN_EXISTING,
+                0,
+                None
+            )
+
+            print("-------------------")
+            # Check error after file creation
+            err = ctypes.GetLastError()
+            if( err > 0 ):
+                print( "PipeServer::ReleasePipe()...Error check afer client::CreateFileW:", ctypes.GetLastError(), h )
+                return
+
             Kernel32.DisconnectNamedPipe ( self.__m_PipeHandle )
             Kernel32.CloseHandle( self.__m_PipeHandle )
-
+            self.__m_PipeHandle = None
+            self.__m_IsListening = False
 
 
 
@@ -158,13 +173,16 @@ class PipeServer:
             print( "waiting for client connection..." )
             result = Kernel32.ConnectNamedPipe( self.__m_PipeHandle, None )#win32pipe.ConnectNamedPipe( pipe, None )
 
+            print("++++++++++++++++")
             # クライアント側で閉じたらサーバー側でも名前付きパイプの作り直しが必要.
             if( result==0 ):
                 err = ctypes.GetLastError()
-                print( "Error occured while connecting named pipe...", err )
-                #return
-                self.InitPipe()
+                print( "PipeServer::run()...Error occured while connecting named pipe...", err )
 
+                if( err==6 ):
+                    break
+
+                self.InitPipe()
                 continue
 
             print( "established connection. starts listening." )
@@ -184,7 +202,7 @@ class PipeServer:
 
                 #dataからbytearrayへ# https://stackoverflow.com/questions/29291624/python-convert-ctypes-ubyte-array-to-string/29293102#29293102
                 char_array = ctypes.cast( data, ctypes.c_char_p )
-                print( ">", char_array.value )
+                print( ">>", char_array.value )
 
 
             except ReceiveMessageError as e:
@@ -205,9 +223,6 @@ class PipeClient:
         self.__m_PipeName = ""
         self.__m_PipeHandle = None
         self.__m_MaxTrials = 5
-
-        self.__m_IsListening = False
-        self.__m_Thread = None
 
 
 
@@ -257,7 +272,6 @@ class PipeClient:
         self.__m_PipeHandle = None
 
         self.__m_PipeName = ""
-        self.__m_IsListening = False
 
 
 
@@ -268,7 +282,7 @@ class PipeClient:
         while( trial < self.__m_MaxTrials ):
             try:
 
-                print( f"writing message {trial}" )
+                #print( f"writing message {trial}" )
                 # convert to bytes
                 ##msg = str.encode( f"{count}" )
 
@@ -277,68 +291,6 @@ class PipeClient:
                 return
 
             except SendMessageError as e:#pywintypes.error as e::
-                print( 'Client::send()... SendMessageError occured.' )
+                print( "Client::send()... SendMessageError occured.... trial", trial )
                 trial += 1
 
-
-
-    def listen( self ):
-
-        while( self.__m_IsListening ):
-
-            try:
-
-                data = receive_message( self.__m_PipeHandle )
-
-                #dataからbytearrayへ# https://stackoverflow.com/questions/29291624/python-convert-ctypes-ubyte-array-to-string/29293102#29293102
-                char_array = ctypes.cast( data, ctypes.c_char_p )
-                print( ">", char_array.value )
-
-
-            except ReceiveMessageError as e:
-                print( 'Client::listen()... ReceiveMessageError occured.' )
-                break
-
-
-
-
-    def startListen( self ):
-
-        self.__m_IsListening = True
-        self.__m_Thread = threading.Thread( target=self.listen )
-        self.__m_Thread.start()
-
-
-
-    def stopListen( self ):
-        self.__m_IsListening = False
-
-        if( self.__m_Thread ):
-            self.__m_Thread.join()
-        self.__m_Thread = None
-
-        print("stopListen...")
-
-
-
-
-#def func():
-
-#    for i in range( 10):
-#        print("----------" )
-#        time.sleep(1)
-
-
-
-
-#if __name__=="__main__":
-
-#    th = threading.Thread( target=func )
-#    th.start()
-
-#    input_text = ""
-
-#    while( input_text != "quit" ):
-
-#        input_text = input(">")
-#        print( ">" + input_text )
