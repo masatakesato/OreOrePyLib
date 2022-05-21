@@ -22,6 +22,7 @@ import oreorepylib.utils.environment
 
 import traceback
 
+import threading
 import struct
 import win32con
 import ctypes
@@ -130,7 +131,7 @@ class PipeServer:
             0,
             None )
 
-        # CHeck error after file creation
+        # Check error after file creation
         err = ctypes.GetLastError()
         if( err > 0 ):
             print( "error check after client::CreateNamedPipeW:", ctypes.GetLastError(), self.__m_PipeHandle )
@@ -184,7 +185,6 @@ class PipeServer:
                 #dataからbytearrayへ# https://stackoverflow.com/questions/29291624/python-convert-ctypes-ubyte-array-to-string/29293102#29293102
                 char_array = ctypes.cast( data, ctypes.c_char_p )
                 print( ">", char_array.value )
-                #print(f"message: {data.value}")
 
 
             except ReceiveMessageError as e:
@@ -207,6 +207,7 @@ class PipeClient:
         self.__m_MaxTrials = 5
 
         self.__m_IsListening = False
+        self.__m_Thread = None
 
 
 
@@ -231,7 +232,7 @@ class PipeClient:
             None
         )
 
-        # CHeck error after file creation
+        # Check error after file creation
         err = ctypes.GetLastError()
         if( err > 0 ):
             print( "error check afer client::CreateFileW:", ctypes.GetLastError(), self.__m_PipeHandle )
@@ -286,24 +287,37 @@ class PipeClient:
         while( self.__m_IsListening ):
 
             try:
-                data = (ctypes.c_byte * 64 * 1024)()
-                byteread = DWORD()
 
-                # https://github.com/ipython/ipython/blob/master/IPython/utils/_process_win32_controller.py
-                if( not ctypes.windll.kernel32.ReadFile( self.__m_PipeHandle, data, 64*1024, ctypes.byref(byteread), None ) ):
-                    raise ReceiveMessageError( traceback.format_exc() )#raise ctypes.WinError()
+                data = receive_message( self.__m_PipeHandle )
 
                 #dataからbytearrayへ# https://stackoverflow.com/questions/29291624/python-convert-ctypes-ubyte-array-to-string/29293102#29293102
                 char_array = ctypes.cast( data, ctypes.c_char_p )
                 print( ">", char_array.value )
-                #print(f"message: {data.value}")
 
 
             except ReceiveMessageError as e:
-                print( 'Client::call()... ReceiveMessageError occured.' )
+                print( 'Client::listen()... ReceiveMessageError occured.' )
                 break
 
 
+
+
+    def startListen( self ):
+
+        self.__m_IsListening = True
+        self.__m_Thread = threading.Thread( target=self.listen )
+        self.__m_Thread.start()
+
+
+
+    def stopListen( self ):
+        self.__m_IsListening = False
+
+        if( self.__m_Thread ):
+            self.__m_Thread.join()
+        self.__m_Thread = None
+
+        print("stopListen...")
 
 
 

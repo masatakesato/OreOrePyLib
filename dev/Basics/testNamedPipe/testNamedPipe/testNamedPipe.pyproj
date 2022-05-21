@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>9218189b-3e3f-49c3-9c6b-c230ad9bc589</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>ttttclient.py</StartupFile>
+    <StartupFile>testHalfDuplex1.py</StartupFile>
     <SearchPath>..\..\..\..\..\OreOrePyLib</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -20,10 +20,13 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="halfduplexnode.py" />
+    <Compile Include="namedpipe.py" />
+    <Compile Include="testHalfDuplex1.py" />
+    <Compile Include="testHalfDuplex2.py" />
     <Compile Include="testNamedPipe.py" />
-    <Compile Include="tttt.py" />
-    <Compile Include="ttttclient.py" />
-    <Compile Include="ttttserver.py" />
+    <Compile Include="testNamedPipeClient_main.py" />
+    <Compile Include="testNamedPipeServer_main.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
