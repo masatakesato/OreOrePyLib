@@ -117,6 +117,9 @@ class PipeServer:
 
     def InitPipe( self ):
 
+        print( "PipeServer::InitPipe()..." )
+        print( self.__m_PipeHandle )
+
         # Disconnect existing named pipe
         self.ReleasePipe()
 
@@ -137,38 +140,75 @@ class PipeServer:
 
         print( "Successfully created named pipe:", self.__m_PipeName )
 
+        self.__m_IsListening = True
+
 
 
     def ReleasePipe( self ):
+
         if( self.__m_PipeHandle ):
+            print( "ReleasePipe::DisconnectNamedPipe", self.__m_PipeHandle )
+            Kernel32.DisconnectNamedPipe( self.__m_PipeHandle )
 
-            h = Kernel32.CreateFileW(
-                self.__m_PipeName,
-                win32con.GENERIC_READ | win32con.GENERIC_WRITE,
-                0,
-                None,
-                win32con.OPEN_EXISTING,
-                0,
-                None
-            )
-
-            print("-------------------")
-            # Check error after file creation
-            err = ctypes.GetLastError()
-            if( err > 0 ):
-                print( "PipeServer::ReleasePipe()...Error check afer client::CreateFileW:", ctypes.GetLastError(), h )
-                return
-
-            Kernel32.DisconnectNamedPipe ( self.__m_PipeHandle )
+            print( "ReleasePipe:", ctypes.GetLastError() )
             Kernel32.CloseHandle( self.__m_PipeHandle )
-            self.__m_PipeHandle = None
-            self.__m_IsListening = False
+
+        print( "ReleasePipe::", ctypes.GetLastError() )
+        self.__m_PipeHandle = None
+        self.__m_IsListening = False
+
+
+
+    def Name( self ):
+        return self.__m_PipeName
+
+
+    def SetListen( self, flag ):
+        self.__m_IsListening = flag
+
+
+    #def SignalStopListen( self ):
+
+    #    if( self.__m_IsListening ):
+
+    #        self.__m_IsListening = False
+
+    #        print( "SignalStopListen::send_message", ctypes.GetLastError() )
+    #        send_message( self.__m_PipeHandle, b"bb------++++" )
+
+    #    else:
+
+    #        self.__m_IsListening = False
+
+    #        Kernel32.CreateFileW(
+    #            self.__m_PipeName,
+    #            win32con.GENERIC_READ | win32con.GENERIC_WRITE,
+    #            0,
+    #            None,
+    #            win32con.OPEN_EXISTING,
+    #            0,
+    #            None
+    #        )
+
+
+    #    print( "SignalStopListen::ReleasePipe" )
+
+    #    self.ReleasePipe()
+
+
+
+    def Status( self ):
+        print( "//============ PipeServer Status ===========//" )
+        print( "PipeName:", self.__m_PipeName )
+        print( "PipeHandle:", self.__m_PipeHandle )
+        print( "IsListening:", self.__m_IsListening )
+        print("")
 
 
 
     def run( self ):
 
-        while True:
+        while self.__m_IsListening:#True:#
 
             print( "waiting for client connection..." )
             result = Kernel32.ConnectNamedPipe( self.__m_PipeHandle, None )#win32pipe.ConnectNamedPipe( pipe, None )
@@ -177,18 +217,21 @@ class PipeServer:
             # クライアント側で閉じたらサーバー側でも名前付きパイプの作り直しが必要.
             if( result==0 ):
                 err = ctypes.GetLastError()
-                print( "PipeServer::run()...Error occured while connecting named pipe...", err )
+                print( "PipeServer::run()...Error occured while connecting named pipe...", err, self.__m_PipeHandle )
 
-                if( err==6 ):
-                    break
+                if( self.__m_IsListening==False ):#err==6 and 
+                    self.ReleasePipe()
+                    return
 
                 self.InitPipe()
                 continue
 
             print( "established connection. starts listening." )
-            self.__m_IsListening = True
+            #self.__m_IsListening = True
 
             self.listen()
+
+        print("end of run.")
 
 
 
@@ -198,6 +241,7 @@ class PipeServer:
 
             try:
 
+                print( "waiting for message..." )
                 data = receive_message( self.__m_PipeHandle )
 
                 #dataからbytearrayへ# https://stackoverflow.com/questions/29291624/python-convert-ctypes-ubyte-array-to-string/29293102#29293102
