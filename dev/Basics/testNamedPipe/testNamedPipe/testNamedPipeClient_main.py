@@ -1,8 +1,18 @@
 ﻿from namedpipe import *
 
-
 import threading
 import time
+
+
+import sys
+
+if( sys.version_info.major==3 ):
+    def Input( prompt=None ):
+        return input( prompt )
+else:
+    def Input( prompt=None ):
+        return raw_input( prompt )
+
 
 
 g_PipeName = r"\\.\pipe\Foo"
@@ -17,7 +27,7 @@ if __name__=="__main__":
 
     while( True ):
 
-        input_text = input(">")
+        input_text = Input(">")
 
         if( input_text == "quit" ):
             break

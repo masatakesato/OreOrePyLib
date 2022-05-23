@@ -44,7 +44,7 @@ class HalfDuplexNode:
 
         # Start listen thread
         #print("StartListen::running thread...")
-        self.__m_ListenThread = threading.Thread( target=self.__m_Receiver.run )
+        self.__m_ListenThread = threading.Thread( target=self.__m_Receiver.Run )
         self.__m_ListenThread.start()
 
 

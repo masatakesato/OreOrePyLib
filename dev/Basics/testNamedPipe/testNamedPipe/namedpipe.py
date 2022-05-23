@@ -8,18 +8,25 @@
 
 import oreorepylib.utils.environment
 
-import traceback
-
+import sys
 import threading
 import struct
-import win32con
 import ctypes
 from ctypes.wintypes import DWORD
+import traceback
 
 from oreorepylib.network.message_protocol import SendMessageError, ReceiveMessageError
 
 
 Kernel32 = ctypes.windll.kernel32
+
+
+if( sys.version_info.major==3 ):
+    CreateNamedPipe = Kernel32.CreateNamedPipeW
+    CreateFile = Kernel32.CreateFileW
+else:
+    CreateNamedPipe = Kernel32.CreateNamedPipeA
+    CreateFile = Kernel32.CreateFileA
 
 
 
@@ -54,10 +61,9 @@ def receive_message( pipe_handle ):
     #if( msg_len.value==0 ):
     #    return None
 
-
     # Then read actual buffer#return receive_all( pipe_handle, msg_len )
     # https://github.com/ipython/ipython/blob/master/IPython/utils/_process_win32_controller.py
-    data = ( ctypes.c_byte * msg_len.value )()#64 * 1024)()
+    data = ( ctypes.c_byte * msg_len.value )()
     if( not Kernel32.ReadFile( pipe_handle, data, msg_len, ctypes.byref(msg_len), None ) ):
         raise ReceiveMessageError( traceback.format_exc() )
         return None#b''
@@ -81,6 +87,25 @@ def receive_message( pipe_handle ):
 #    #print( data )
 #    return data
 
+
+
+class Win32Constant:
+
+    GENERIC_READ = -2147483648
+    GENERIC_WRITE = 1073741824
+
+    OPEN_EXISTING = 3
+
+    PIPE_ACCESS_INBOUND = 1
+    PIPE_ACCESS_OUTBOUND = 2
+    PIPE_ACCESS_DUPLEX = 3
+
+    PIPE_WAIT = 0
+    PIPE_NOWAIT = 1
+    PIPE_READMODE_BYTE = 0
+    PIPE_READMODE_MESSAGE = 2
+    PIPE_TYPE_BYTE = 0
+    PIPE_TYPE_MESSAGE = 4
 
 
 
@@ -108,10 +133,10 @@ class PipeServer:
         # Disconnect existing named pipe
         self.ReleasePipe()
 
-        self.__m_PipeHandle = Kernel32.CreateNamedPipeW(
+        self.__m_PipeHandle = CreateNamedPipe(
             self.__m_PipeName, #r'\\.\pipe\Foo',
-            win32con.PIPE_ACCESS_DUPLEX,
-            win32con.PIPE_TYPE_BYTE | win32con.PIPE_READMODE_BYTE | win32con.PIPE_WAIT,
+            Win32Constant.PIPE_ACCESS_DUPLEX,
+            Win32Constant.PIPE_TYPE_BYTE | Win32Constant.PIPE_READMODE_BYTE | Win32Constant.PIPE_WAIT,
             1, 65536, 65536,
             0,
             None )
@@ -160,7 +185,7 @@ class PipeServer:
 
 
 
-    def run( self ):
+    def Run( self ):
 
         self.__m_IsListening = True
 
@@ -172,7 +197,7 @@ class PipeServer:
             # クライアント側で閉じたらサーバー側でも名前付きパイプの作り直しが必要.
             if( result==0 ):
                 err = ctypes.GetLastError()
-                print( "PipeServer::run()...Error occured while connecting named pipe...", err, self.__m_PipeHandle )
+                print( "PipeServer::Run()...Error occured while connecting named pipe...", err, self.__m_PipeHandle )
 
                 if( self.__m_IsListening==False ):#err==6 and 
                     self.ReleasePipe()
@@ -182,11 +207,11 @@ class PipeServer:
                 continue
 
             print( "established connection. starts listening." )
-            self.Listen()
+            self.__Listen()
 
 
 
-    def Listen( self ):
+    def __Listen( self ):
 
         while( self.__m_IsListening ):
 
@@ -227,12 +252,12 @@ class PipeClient:
 
         # https://programtalk.com/vs4/python/7855/conveyor/src/main/python/conveyor/address.py/
         # Establish pipe connection
-        self.__m_PipeHandle = Kernel32.CreateFileW(
+        self.__m_PipeHandle = CreateFile(
             self.__m_PipeName,#r'\\.\pipe\Foo',
-            win32con.GENERIC_READ | win32con.GENERIC_WRITE,
+            Win32Constant.GENERIC_READ | Win32Constant.GENERIC_WRITE,
             0,
             None,
-            win32con.OPEN_EXISTING,
+            Win32Constant.OPEN_EXISTING,
             0,
             None
         )
@@ -240,10 +265,10 @@ class PipeClient:
         # Check error after file creation
         err = ctypes.GetLastError()
         if( err > 0 ):
-            print( "error check afer client::CreateFileW:", ctypes.GetLastError(), self.__m_PipeHandle )
+            print( "error check afer client::CreateFile:", ctypes.GetLastError(), self.__m_PipeHandle )
             return
 
-        lpMode = DWORD( win32con.PIPE_READMODE_BYTE )#win32con.PIPE_READMODE_MESSAGE )
+        lpMode = DWORD( Win32Constant.PIPE_READMODE_BYTE )#Win32Constant.PIPE_READMODE_MESSAGE )
         res = Kernel32.SetNamedPipeHandleState( self.__m_PipeHandle, ctypes.byref(lpMode), None, None )
 
         if( res == 0 ):

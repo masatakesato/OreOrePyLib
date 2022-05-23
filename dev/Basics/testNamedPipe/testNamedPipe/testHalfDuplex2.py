@@ -1,4 +1,17 @@
-﻿from halfduplexnode import *
+﻿import sys
+
+if( sys.version_info.major==3 ):
+    def Input( prompt=None ):
+        return input( prompt )
+else:
+    def Input( prompt=None ):
+        return raw_input( prompt )
+
+
+
+
+
+from halfduplexnode import *
 
 
 g_InPipeName = r"\\.\pipe\Foo2"
@@ -15,7 +28,7 @@ if __name__=="__main__":
 
     while( True ):
 
-        input_text = input(">")
+        input_text = Input(">")
 
         if( input_text == "quit" ):
             break

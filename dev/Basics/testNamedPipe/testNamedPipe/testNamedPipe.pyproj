@@ -4,13 +4,14 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>9218189b-3e3f-49c3-9c6b-c230ad9bc589</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>testHalfDuplex1.py</StartupFile>
-    <SearchPath>..\..\..\..\..\OreOrePyLib</SearchPath>
+    <StartupFile>
+    </StartupFile>
+    <SearchPath>..\..\..\..\..\OreOrePyLib;..\..\..\..\..\..\Lib\umsgpack</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>testNamedPipe</Name>
     <RootNamespace>testNamedPipe</RootNamespace>
-    <InterpreterId>CondaEnv|CondaEnv|python27</InterpreterId>
+    <InterpreterId>CondaEnv|CondaEnv|testpy37</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="CondaEnv|CondaEnv|python27" />
+    <InterpreterReference Include="CondaEnv|CondaEnv|testpy37" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
