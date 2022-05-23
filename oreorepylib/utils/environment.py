@@ -1,7 +1,9 @@
 ﻿import sys
 import os
 
-if sys.version_info.major >= 3:
+from .compat import *
+
+if Python3x:
     import pathlib
 
 
@@ -20,13 +22,13 @@ def AddPythonEnvironmentPaths( executable=None ):
         )
 
     envroot = pathlib.Path( sys.executable ).parents[0] \
-       if sys.version_info.major >= 3 \
+       if Python3x \
        else os.path.dirname( sys.executable )
 
 
     for subdir in subDirectories:
         subpath = pathlib.Path.joinpath( envroot, subdir ) \
-            if sys.version_info.major >= 3 \
+            if Python3x \
             else os.path.join( envroot, subdir )
         print( subpath )
         os.environ["PATH"] += str(subpath) + ";"

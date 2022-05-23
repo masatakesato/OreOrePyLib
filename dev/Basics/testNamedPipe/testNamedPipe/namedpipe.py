@@ -15,13 +15,14 @@ import ctypes
 from ctypes.wintypes import DWORD
 import traceback
 
+import oreorepylib.utils.compat as compat
 from oreorepylib.network.message_protocol import SendMessageError, ReceiveMessageError
 
 
 Kernel32 = ctypes.windll.kernel32
 
 
-if( sys.version_info.major==3 ):
+if( compat.Python3x ):
     CreateNamedPipe = Kernel32.CreateNamedPipeW
     CreateFile = Kernel32.CreateFileW
 else:

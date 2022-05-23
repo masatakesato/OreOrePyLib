@@ -4,9 +4,9 @@ import threading
 import time
 
 
-import sys
+import oreorepylib.utils.compat as compat
 
-if( sys.version_info.major==3 ):
+if( compat.Python3x ):
     def Input( prompt=None ):
         return input( prompt )
 else:
