@@ -17,17 +17,17 @@ class HalfDuplexNode:
 
 
     def Connect( self, out_pipe_name ):
-        self.__m_Sender.connect( out_pipe_name )
+        self.__m_Sender.Connect( out_pipe_name )
 
 
 
     def Disconnect( self ):
-        self.__m_Sender.disconnect()
+        self.__m_Sender.Disconnect()
 
 
 
     def Send( self, msg ):
-        self.__m_Sender.send( msg )
+        self.__m_Sender.Send( msg )
 
 
 
@@ -35,16 +35,15 @@ class HalfDuplexNode:
 
         print( "HalfDuplexNode::StartListen()..." )
 
-        self.__m_Receiver.Status()
-
         if( self.__m_Receiver.IsListening() ):
-            print("already listening...")
+            print("  Aborting: already listening...")
             return
 
-        print("StartListen::self.__m_Receiver.InitPipe()...")
+        # Init pipe
         self.__m_Receiver.InitPipe()
 
-        print("StartListen::running thread...")
+        # Start listen thread
+        #print("StartListen::running thread...")
         self.__m_ListenThread = threading.Thread( target=self.__m_Receiver.run )
         self.__m_ListenThread.start()
 
@@ -53,11 +52,13 @@ class HalfDuplexNode:
     def StopListen( self ):
         
         print( "HalfDuplexNode::StopListen()..." )
+
+        # Set polling flag to false
         #print("StopListen::self.__m_Receiver.SetListen(False)...")
         self.__m_Receiver.SetListen( False )
 
         if( self.__m_ListenThread ):
-            print("StopListen::Kernel32.OpenThread()...")
+            #print("StopListen::Kernel32.OpenThread()...")
             hthread = Kernel32.OpenThread( 0x40000000, False, self.__m_ListenThread.ident )
             Kernel32.CancelSynchronousIo( hthread )
             Kernel32.CloseHandle( hthread )
@@ -69,7 +70,7 @@ class HalfDuplexNode:
         self.__m_Receiver.ReleasePipe()
 
         # Check status
-        self.__m_Receiver.Status()
+        #self.__m_Receiver.Status()
 
 
 

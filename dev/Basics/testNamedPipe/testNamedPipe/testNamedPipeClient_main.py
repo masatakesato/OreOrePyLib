@@ -23,23 +23,10 @@ if __name__=="__main__":
             break
 
         elif( input_text=="disconnect" ):
-            client.disconnect()
+            client.Disconnect()
 
         elif( input_text=="connect" ):
-            client.connect( g_PipeName )
+            client.Connect( g_PipeName )
 
         else:
-            client.send( input_text.encode() )
-
-    #client.send( "Message from client".encode() )
-
-    #client.listen()
-
-    #client.disconnect()
-
-
-
-
-
-
-time.sleep(5)
+            client.Send( input_text.encode() )

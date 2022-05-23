@@ -1,16 +1,4 @@
-
-# サーバー
-# inputで入力した文字列をクライアントに送る
-# クライアントからの受信は無限ループでポーリングして待つ
-# ポーリングは別スレッドに分離しておく
-
-
-
-# クライアント
-# inputで入力した文字列をサーバーに送る
-# サーバーからの受信は無限ループでポーリングして待つ
-# ポーリングは別スレッドに分離しておく
-
+# -*- coding: utf-8 -*-
 
 # https://www.kazetest.com/vcmemo/pipe/pipe.htm
 # 複数クライアントを扱う場合は、
@@ -42,11 +30,11 @@ def send_message( pipe_handle, msg ):
 
     if( not msg ):  return
 
-    # send data length
+    # Send data length
     if( not Kernel32.WriteFile( pipe_handle, struct.pack( 'I', len(msg) ), 4, None, None ) ):
         raise SendMessageError()
 
-    # send data
+    # Send data
     #numBytes = DWORD()
     if( not Kernel32.WriteFile( pipe_handle, msg, len(msg), None, None ) ):#ctypes.byref(numBytes), None )#win32file.WriteFile( pipe, msg )
         raise SendMessageError()#ctypes.WinError()
@@ -143,14 +131,12 @@ class PipeServer:
 
     def ReleasePipe( self ):
 
-        if( self.__m_PipeHandle ):
-            print( "ReleasePipe::DisconnectNamedPipe", self.__m_PipeHandle )
-            Kernel32.DisconnectNamedPipe( self.__m_PipeHandle )
+        print( "PipeServer::ReleasePipe()..." )
 
-            print( "ReleasePipe:", ctypes.GetLastError() )
+        if( self.__m_PipeHandle ):
+            Kernel32.DisconnectNamedPipe( self.__m_PipeHandle )
             Kernel32.CloseHandle( self.__m_PipeHandle )
 
-        print( "ReleasePipe::", ctypes.GetLastError() )
         self.__m_PipeHandle = None
         self.__m_IsListening = False
 
@@ -170,19 +156,19 @@ class PipeServer:
         print( "//============ PipeServer Status ===========//" )
         print( "PipeName:", self.__m_PipeName )
         print( "PipeHandle:", self.__m_PipeHandle )
-        print( "IsListening:", self.__m_IsListening )
-        print("")
+        print( "IsListening: %r\n" % self.__m_IsListening )
 
 
 
     def run( self ):
+
+        self.__m_IsListening = True
 
         while self.__m_IsListening:#True:#
 
             print( "waiting for client connection..." )
             result = Kernel32.ConnectNamedPipe( self.__m_PipeHandle, None )#win32pipe.ConnectNamedPipe( pipe, None )
 
-            print("++++++++++++++++")
             # クライアント側で閉じたらサーバー側でも名前付きパイプの作り直しが必要.
             if( result==0 ):
                 err = ctypes.GetLastError()
@@ -196,16 +182,16 @@ class PipeServer:
                 continue
 
             print( "established connection. starts listening." )
-            self.listen()
+            self.Listen()
 
 
 
-    def listen( self ):
+    def Listen( self ):
 
         while( self.__m_IsListening ):
 
             try:
-
+                # Receive message
                 print( "waiting for message..." )
                 data = receive_message( self.__m_PipeHandle )
 
@@ -213,14 +199,9 @@ class PipeServer:
                 char_array = ctypes.cast( data, ctypes.c_char_p )
                 print( ">>", char_array.value )
 
-
             except ReceiveMessageError as e:
                 #print( 'Client::call()... ReceiveMessageError occured.' )
                 break
-
-
-
-
 
 
 
@@ -236,11 +217,11 @@ class PipeClient:
 
 
     def __del__( self ):
-        self.disconnect()
+        self.Disconnect()
 
 
 
-    def connect( self, pipe_name ):
+    def Connect( self, pipe_name ):
 
         self.__m_PipeName = pipe_name
 
@@ -266,7 +247,7 @@ class PipeClient:
         res = Kernel32.SetNamedPipeHandleState( self.__m_PipeHandle, ctypes.byref(lpMode), None, None )
 
         if( res == 0 ):
-            print(f"SetNamedPipeHandleState return code: {ctypes.GetLastError()}")
+            print( "PipeClient::Connect()...Error occured while SetNamedPipeHandleState:", ctypes.GetLastError() )
             return
 
 
@@ -274,7 +255,7 @@ class PipeClient:
 
 
 
-    def disconnect( self ):
+    def Disconnect( self ):
         if( self.__m_PipeHandle ):
             Kernel32.DisconnectNamedPipe ( self.__m_PipeHandle )
             Kernel32.CloseHandle( self.__m_PipeHandle )
@@ -284,22 +265,17 @@ class PipeClient:
 
 
 
-    def send( self, msg ):
+    def Send( self, msg ):
 
         trial = 0
 
         while( trial < self.__m_MaxTrials ):
             try:
-
-                #print( f"writing message {trial}" )
-                # convert to bytes
-                ##msg = str.encode( f"{count}" )
-
+                # Send message to server
                 send_message( self.__m_PipeHandle, msg )
-
                 return
 
             except SendMessageError as e:#pywintypes.error as e::
-                print( "Client::send()... SendMessageError occured.... trial", trial )
+                print( "Client::Send()... SendMessageError occured.... trial", trial )
                 trial += 1
 
