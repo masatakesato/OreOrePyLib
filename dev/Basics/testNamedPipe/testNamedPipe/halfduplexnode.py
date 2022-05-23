@@ -12,7 +12,6 @@ class HalfDuplexNode:
         self.__m_Receiver = PipeServer( in_pipe_name )
         self.__m_Sender = PipeClient()
 
-        self.__m_IsListening = False
         self.__m_ListenThread = None
 
 
@@ -32,24 +31,13 @@ class HalfDuplexNode:
 
 
 
-    #def StartListen( self ):
-    #    self.__m_Receiver.startListen()
-
-
-
-    #def StopListen( self ):
-    #    self.__m_Receiver.stopListen()
-
-
-
-
     def StartListen( self ):
 
         print( "HalfDuplexNode::StartListen()..." )
 
         self.__m_Receiver.Status()
 
-        if( self.__m_IsListening ):
+        if( self.__m_Receiver.IsListening() ):
             print("already listening...")
             return
 
@@ -57,7 +45,6 @@ class HalfDuplexNode:
         self.__m_Receiver.InitPipe()
 
         print("StartListen::running thread...")
-        self.__m_IsListening = True
         self.__m_ListenThread = threading.Thread( target=self.__m_Receiver.run )
         self.__m_ListenThread.start()
 
@@ -66,10 +53,7 @@ class HalfDuplexNode:
     def StopListen( self ):
         
         print( "HalfDuplexNode::StopListen()..." )
-
-        #self.__m_Receiver.SignalStopListen()
-
-        print("StopListen::self.__m_Receiver.SetListen(False)...")
+        #print("StopListen::self.__m_Receiver.SetListen(False)...")
         self.__m_Receiver.SetListen( False )
 
         if( self.__m_ListenThread ):
@@ -77,23 +61,14 @@ class HalfDuplexNode:
             hthread = Kernel32.OpenThread( 0x40000000, False, self.__m_ListenThread.ident )
             Kernel32.CancelSynchronousIo( hthread )
             Kernel32.CloseHandle( hthread )
-            
-            
-        print("StopListen::self.__m_Receiver.ReleasePipe()...")
-        #self.__m_Receiver.SignalStopListen()
-        self.__m_Receiver.ReleasePipe()
-
-        #if( self.__m_ListenThread ):
-        #    self.__m_ListenThread.join()
+            self.__m_ListenThread.join()
         self.__m_ListenThread = None
 
+        # Release pipe instances
+        #print("StopListen::self.__m_Receiver.ReleasePipe()...")
+        self.__m_Receiver.ReleasePipe()
 
- 
-
-
-        self.__m_IsListening = False
-
-
+        # Check status
         self.__m_Receiver.Status()
 
 

@@ -106,8 +106,6 @@ class PipeServer:
 
         self.__m_PipeHandle = None
 
-        self.InitPipe()
-
 
 
     def __del__( self ):
@@ -118,7 +116,6 @@ class PipeServer:
     def InitPipe( self ):
 
         print( "PipeServer::InitPipe()..." )
-        print( self.__m_PipeHandle )
 
         # Disconnect existing named pipe
         self.ReleasePipe()
@@ -159,41 +156,13 @@ class PipeServer:
 
 
 
-    def Name( self ):
-        return self.__m_PipeName
-
-
     def SetListen( self, flag ):
         self.__m_IsListening = flag
 
 
-    #def SignalStopListen( self ):
 
-    #    if( self.__m_IsListening ):
-
-    #        self.__m_IsListening = False
-
-    #        print( "SignalStopListen::send_message", ctypes.GetLastError() )
-    #        send_message( self.__m_PipeHandle, b"bb------++++" )
-
-    #    else:
-
-    #        self.__m_IsListening = False
-
-    #        Kernel32.CreateFileW(
-    #            self.__m_PipeName,
-    #            win32con.GENERIC_READ | win32con.GENERIC_WRITE,
-    #            0,
-    #            None,
-    #            win32con.OPEN_EXISTING,
-    #            0,
-    #            None
-    #        )
-
-
-    #    print( "SignalStopListen::ReleasePipe" )
-
-    #    self.ReleasePipe()
+    def IsListening( self ):
+        return self.__m_IsListening
 
 
 
@@ -227,11 +196,7 @@ class PipeServer:
                 continue
 
             print( "established connection. starts listening." )
-            #self.__m_IsListening = True
-
             self.listen()
-
-        print("end of run.")
 
 
 
