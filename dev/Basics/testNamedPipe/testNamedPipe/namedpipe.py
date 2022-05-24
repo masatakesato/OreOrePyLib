@@ -17,6 +17,7 @@ import traceback
 
 import oreorepylib.utils.compat as compat
 from oreorepylib.network.message_protocol import SendMessageError, ReceiveMessageError
+from oreorepylib.network.serializer import Serializer
 
 
 Kernel32 = ctypes.windll.kernel32
@@ -120,6 +121,9 @@ class PipeServer:
 
         self.__m_PipeHandle = None
 
+        #self.__m_Serializer = Serializer( pack_encoding=pack_encoding, unpack_encoding=unpack_encoding )
+        self.__m_Serializer = Serializer( pack_encoding=None, unpack_encoding=None )
+
 
 
     def __del__( self ):
@@ -145,11 +149,11 @@ class PipeServer:
         # Check error after file creation
         err = ctypes.GetLastError()
         if( err > 0 ):
-            print( "error check after client::CreateNamedPipeW:", ctypes.GetLastError(), self.__m_PipeHandle )
+            print( "error check after client::CreateNamedPipe(): %d" % ctypes.GetLastError() )
             self.__m_PipeHandle = None
             return
 
-        print( "Successfully created named pipe:", self.__m_PipeName )
+        print( "Successfully created named pipe: %s" % self.__m_PipeName )
 
         self.__m_IsListening = True
 
@@ -180,8 +184,8 @@ class PipeServer:
 
     def Status( self ):
         print( "//============ PipeServer Status ===========//" )
-        print( "PipeName:", self.__m_PipeName )
-        print( "PipeHandle:", self.__m_PipeHandle )
+        print( "PipeName: %s" % self.__m_PipeName )
+        print( "PipeHandle: %d" % self.__m_PipeHandle )
         print( "IsListening: %r\n" % self.__m_IsListening )
 
 
@@ -198,7 +202,7 @@ class PipeServer:
             # クライアント側で閉じたらサーバー側でも名前付きパイプの作り直しが必要.
             if( result==0 ):
                 err = ctypes.GetLastError()
-                print( "PipeServer::Run()...Error occured while connecting named pipe...", err, self.__m_PipeHandle )
+                print( "PipeServer::Run()...Error occured while ConnectNamedPipe(): %d" % err )
 
                 if( self.__m_IsListening==False ):#err==6 and 
                     self.ReleasePipe()
@@ -219,11 +223,15 @@ class PipeServer:
             try:
                 # Receive message
                 print( "waiting for message..." )
-                data = receive_message( self.__m_PipeHandle )
+                recv_data = receive_message( self.__m_PipeHandle )
 
                 #dataからbytearrayへ# https://stackoverflow.com/questions/29291624/python-convert-ctypes-ubyte-array-to-string/29293102#29293102
-                char_array = ctypes.cast( data, ctypes.c_char_p )
-                print( ">>", char_array.value )
+                char_array = ctypes.cast( recv_data, ctypes.c_char_p )
+                #print( ">>", char_array.value )
+
+                msg = self.__m_Serializer.Unpack( char_array.value )
+                print( ">>", msg )
+
 
             except ReceiveMessageError as e:
                 #print( 'Client::call()... ReceiveMessageError occured.' )
@@ -239,6 +247,9 @@ class PipeClient:
         self.__m_PipeName = ""
         self.__m_PipeHandle = None
         self.__m_MaxTrials = 5
+
+
+        self.__m_Serializer = Serializer( pack_encoding=None, unpack_encoding=None )
 
 
 
@@ -266,18 +277,18 @@ class PipeClient:
         # Check error after file creation
         err = ctypes.GetLastError()
         if( err > 0 ):
-            print( "error check afer client::CreateFile:", ctypes.GetLastError(), self.__m_PipeHandle )
+            print( "PipeClient::Connect()...Error occured while CreateFile(): %d" % ctypes.GetLastError() )
             return
 
         lpMode = DWORD( Win32Constant.PIPE_READMODE_BYTE )#Win32Constant.PIPE_READMODE_MESSAGE )
         res = Kernel32.SetNamedPipeHandleState( self.__m_PipeHandle, ctypes.byref(lpMode), None, None )
 
         if( res == 0 ):
-            print( "PipeClient::Connect()...Error occured while SetNamedPipeHandleState:", ctypes.GetLastError() )
+            print( "PipeClient::Connect()...Error occured while SetNamedPipeHandleState(): %d" % ctypes.GetLastError() )
             return
 
 
-        print( "Successfully connected to named pipe:", self.__m_PipeName )
+        print( "Successfully connected to named pipe: %s" % self.__m_PipeName )
 
 
 
@@ -297,11 +308,15 @@ class PipeClient:
 
         while( trial < self.__m_MaxTrials ):
             try:
+
+                send_data = self.__m_Serializer.Pack( msg )#( proc_name, args, kwargs ) )
+
                 # Send message to server
-                send_message( self.__m_PipeHandle, msg )
+                send_message( self.__m_PipeHandle, send_data )
+                #send_message( self.__m_PipeHandle, msg )
                 return
 
             except SendMessageError as e:#pywintypes.error as e::
-                print( "Client::Send()... SendMessageError occured.... trial", trial )
+                print( "Client::Send()...SendMessageError occured.... trial %d" % trial )
                 trial += 1
 
