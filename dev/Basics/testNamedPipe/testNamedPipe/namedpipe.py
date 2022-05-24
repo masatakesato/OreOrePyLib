@@ -121,7 +121,6 @@ class PipeServer:
 
         self.__m_PipeHandle = None
 
-        #self.__m_Serializer = Serializer( pack_encoding=pack_encoding, unpack_encoding=unpack_encoding )
         self.__m_Serializer = Serializer( pack_encoding=None, unpack_encoding=None )
 
 
@@ -248,7 +247,6 @@ class PipeClient:
         self.__m_PipeHandle = None
         self.__m_MaxTrials = 5
 
-
         self.__m_Serializer = Serializer( pack_encoding=None, unpack_encoding=None )
 
 
@@ -302,14 +300,14 @@ class PipeClient:
 
 
 
-    def Send( self, msg ):
+    def Send( self, *args, **kwargs ):#msg ):
 
         trial = 0
 
         while( trial < self.__m_MaxTrials ):
             try:
 
-                send_data = self.__m_Serializer.Pack( msg )#( proc_name, args, kwargs ) )
+                send_data = self.__m_Serializer.Pack( (args, kwargs) )#msg )#( proc_name, args, kwargs ) )
 
                 # Send message to server
                 send_message( self.__m_PipeHandle, send_data )

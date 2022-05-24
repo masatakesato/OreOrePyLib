@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.1705
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "testNamedPipe", "testNamedPipe\testNamedPipe.pyproj", "{9218189B-3E3F-49C3-9C6B-C230AD9BC589}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "testNamedPipeRPC", "testNamedPipeRPC\testNamedPipeRPC.pyproj", "{B7188B7E-1638-4357-8B43-6DB7C420650D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9218189B-3E3F-49C3-9C6B-C230AD9BC589}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9218189B-3E3F-49C3-9C6B-C230AD9BC589}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7188B7E-1638-4357-8B43-6DB7C420650D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7188B7E-1638-4357-8B43-6DB7C420650D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
