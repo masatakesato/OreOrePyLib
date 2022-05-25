@@ -1,0 +1,43 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>b7188b7e-1638-4357-8b43-6db7c420650d</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>NamedPipeRPCNode1.py</StartupFile>
+    <SearchPath>..\..\..\..\..\OreOrePyLib;..\..\..\..\..\..\Lib\umsgpack</SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>testNamedPipeRPC</Name>
+    <RootNamespace>testNamedPipeRPC</RootNamespace>
+    <InterpreterId>CondaEnv|CondaEnv|python27</InterpreterId>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="halfduplexrpcnode.py" />
+    <Compile Include="namedpiperpc.py" />
+    <Compile Include="NamedPipeRPCNode1.py" />
+    <Compile Include="testNamedPipeRPCClient_main.py" />
+    <Compile Include="testNamedPipeRPCServer_main.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="CondaEnv|CondaEnv|python27" />
+    <InterpreterReference Include="CondaEnv|CondaEnv|testpy37" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+  <!-- Uncomment the CoreCompile target to enable the Build command in
+       Visual Studio and specify your pre- and post-build commands in
+       the BeforeBuild and AfterBuild targets below. -->
+  <!--<Target Name="CoreCompile" />-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+</Project>
