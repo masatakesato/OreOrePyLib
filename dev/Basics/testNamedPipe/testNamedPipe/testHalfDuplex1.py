@@ -1,15 +1,6 @@
 ﻿import oreorepylib.utils.compat as compat
-
-if( compat.Python3x ):
-    def Input( prompt=None ):
-        return input( prompt )
-else:
-    def Input( prompt=None ):
-        return raw_input( prompt )
-
-
-
 from halfduplexnode import *
+
 
 
 g_InPipeName = r"\\.\pipe\Foo1"
@@ -26,7 +17,7 @@ if __name__=="__main__":
 
     while( True ):
 
-        input_text = Input(">")
+        input_text = compat.Input(">")
 
         if( input_text == "quit" ):
             break

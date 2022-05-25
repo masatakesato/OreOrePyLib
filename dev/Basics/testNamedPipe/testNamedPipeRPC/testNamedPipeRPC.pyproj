@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>b7188b7e-1638-4357-8b43-6db7c420650d</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>NamedPipeRPCNode1.py</StartupFile>
+    <StartupFile>testHalfDuplexRPC2.py</StartupFile>
     <SearchPath>..\..\..\..\..\OreOrePyLib;..\..\..\..\..\..\Lib\umsgpack</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -23,7 +23,8 @@
   <ItemGroup>
     <Compile Include="halfduplexrpcnode.py" />
     <Compile Include="namedpiperpc.py" />
-    <Compile Include="NamedPipeRPCNode1.py" />
+    <Compile Include="testHalfDuplexRPC1.py" />
+    <Compile Include="testHalfDuplexRPC2.py" />
     <Compile Include="testNamedPipeRPCClient_main.py" />
     <Compile Include="testNamedPipeRPCServer_main.py" />
   </ItemGroup>

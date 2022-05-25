@@ -1,17 +1,8 @@
-﻿from namedpipe import *
+﻿import oreorepylib.utils.compat as compat
+from namedpipe import *
 
 import threading
 import time
-
-
-import oreorepylib.utils.compat as compat
-
-if( compat.Python3x ):
-    def Input( prompt=None ):
-        return input( prompt )
-else:
-    def Input( prompt=None ):
-        return raw_input( prompt )
 
 
 
@@ -27,7 +18,7 @@ if __name__=="__main__":
 
     while( True ):
 
-        input_text = Input(">")
+        input_text = compat.Input(">")
 
         if( input_text == "quit" ):
             break

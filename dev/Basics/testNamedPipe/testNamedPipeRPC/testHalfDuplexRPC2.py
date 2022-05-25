@@ -1,6 +1,6 @@
 ﻿import oreorepylib.utils.compat as compat
-from halfduplexnode import *
 
+from halfduplexrpcnode import *
 
 
 g_InPipeName = r"\\.\pipe\Foo2"
@@ -8,10 +8,33 @@ g_OutPipeName = r"\\.\pipe\Foo1"
 
 
 
+
+class Procedure:
+
+    def NoReturn( self ):
+        print( "Procedure::NoReturn()..." )
+
+
+    def Test( self ):
+        print( "Procedure::Test()..." )
+        return "OK..."
+
+
+    def Add( self, a, b ):
+        print( "Procedure::Add( %d, %d )..." % (a, b) )
+        return a + b
+
+
+
+
 if __name__=="__main__":
 
-    node = HalfDuplexNode( g_InPipeName )
+    proc = Procedure()
+    node = HalfDuplexRPCNode( g_InPipeName )
+
+    node.BindProcInstance( proc )
     node.StartListen()
+
    
     input_text = ""
 
@@ -34,5 +57,6 @@ if __name__=="__main__":
         elif( input_text=="stoplisten" ):
             node.StopListen()
 
-        else:
-            node.Send( input_text.encode() )
+        elif( input_text=="testrpc" ):
+            print( node.Call( compat.ToUnicode("Str"), u"Key" ) )
+            #print( node.Call( "Add", 4, 6 ) )

@@ -234,18 +234,16 @@ class PipeServerRPC:
 
                 #dataからbytearrayへ# https://stackoverflow.com/questions/29291624/python-convert-ctypes-ubyte-array-to-string/29293102#29293102
                 char_array = ctypes.cast( recv_data, ctypes.c_char_p )
-                #print( ">>", char_array.value )
 
                 # Deserialize data
                 msg = self.__m_Serializer.Unpack( char_array.value )
                 proc_name = msg[0]
-                args = msg[1]               
+                args = msg[1]
                 kwargs = msg[2] if len(msg)==3 else {}
 
                 # Do something
                 ret = getattr( self.__m_ProcInstance, proc_name )( *args, **kwargs )
 
-                #print( ">>", msg )
                 # Send back result to client
                 if( proc_name!='echo' ): send_message( self.__m_PipeHandle, self.__m_Serializer.Pack( ret ) )
 
@@ -327,7 +325,7 @@ class PipeClientRPC:
 
 
     def Call( self, proc_name, *args, **kwargs ):
-
+        
         trial = 0
 
         while( trial < self.__m_MaxTrials ):

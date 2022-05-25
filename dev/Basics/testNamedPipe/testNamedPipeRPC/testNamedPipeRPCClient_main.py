@@ -1,17 +1,8 @@
-﻿from namedpiperpc import *
+﻿import oreorepylib.utils.compat as compat
+from namedpiperpc import *
 
 import threading
 import time
-
-
-import oreorepylib.utils.compat as compat
-
-if( compat.Python3x ):
-    def Input( prompt=None ):
-        return input( prompt )
-else:
-    def Input( prompt=None ):
-        return raw_input( prompt )
 
 
 
@@ -25,27 +16,9 @@ if __name__=="__main__":
     client.Connect( g_PipeName )
 
 
-    print( client.Call( "NoReturn" ) )
-    print( client.Call( "Test" ) )
+    print( client.Call( u"NoReturn" ) )
+    print( client.Call( u"Test" ) )
 
-    print( client.Call( "Ahgfdd", 4, 6 ) )
+    print( client.Call( u"Ahgfdd", 4, 6 ) )
 
-    print( client.Call( "Add", 4, 6 ) )
-
-    #input_text = ""
-
-    #while( True ):
-
-    #    input_text = Input(">")
-
-    #    if( input_text == "quit" ):
-    #        break
-
-    #    elif( input_text=="disconnect" ):
-    #        client.Disconnect()
-
-    #    elif( input_text=="connect" ):
-    #        client.Connect( g_PipeName )
-
-    #    else:
-    #        client.Send( input_text.encode() )
+    print( client.Call( u"Add", 4, 6 ) )

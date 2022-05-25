@@ -16,6 +16,11 @@ class HalfDuplexRPCNode:
 
 
 
+    def BindProcInstance( self, proc ):
+        self.__m_Receiver.BindProcInstance( proc )
+
+
+
     def Connect( self, out_pipe_name ):
         self.__m_Sender.Connect( out_pipe_name )
 
@@ -26,8 +31,8 @@ class HalfDuplexRPCNode:
 
 
 
-    def Call( self, msg ):
-        return self.__m_Sender.Call( msg )
+    def Call( self, proc_name, *args, **kwargs ):
+        return self.__m_Sender.Call( proc_name, *args, **kwargs )
 
 
 

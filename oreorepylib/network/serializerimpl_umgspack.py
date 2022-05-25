@@ -16,7 +16,7 @@ class Serializer:
 
     def Pack( self, data ):
         try:
-            return umsgpack.packb( data )
+            return umsgpack.packb( data, use_bin_type=True )
 
         except:
             print( 'Exception occured at Serializer::Pack ')
@@ -28,10 +28,10 @@ class Serializer:
 
     def Unpack( self, data ):
         try:
-            return umsgpack.unpackb( data[:len(data)] )
+            return umsgpack.unpackb( data[:len(data)], encoding='utf-8' )
 
         except:
-            print( 'Exception occured at Serializer::Unpack ')
+            print( 'Exception occured at Serializer::Unpack' )
             traceback.print_exc()
             #raise UnpackError( traceback.format_exc() )
             return None
