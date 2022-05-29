@@ -1,6 +1,7 @@
 ﻿import oreorepylib.utils.compat as compat
 from halfduplexrpcnode import *
 
+import time
 
 g_InPipeName = r"\\.\pipe\Foo1"
 g_OutPipeName = r"\\.\pipe\Foo2"
@@ -25,10 +26,12 @@ class Procedure:
 
 
     def Str( self, string ):
-
+        time.sleep(1)
         d = { "Key": 55555 }
 
         print( d[string] )
+
+        
 
 
 
@@ -65,3 +68,5 @@ if __name__=="__main__":
             print( node.Call( "Add", 4, 6 ) )
         #else:
         #    node.Send( input_text.encode() )
+
+    del node

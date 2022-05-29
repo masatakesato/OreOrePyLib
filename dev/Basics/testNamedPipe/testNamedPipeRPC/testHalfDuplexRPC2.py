@@ -60,3 +60,5 @@ if __name__=="__main__":
         elif( input_text=="testrpc" ):
             print( node.Call( compat.ToUnicode("Str"), u"Key" ) )
             #print( node.Call( "Add", 4, 6 ) )
+
+    del node

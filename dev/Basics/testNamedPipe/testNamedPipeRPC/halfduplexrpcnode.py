@@ -16,6 +16,11 @@ class HalfDuplexRPCNode:
 
 
 
+    def __del__( self ):
+        self.StopListen()
+
+
+
     def BindProcInstance( self, proc ):
         self.__m_Receiver.BindProcInstance( proc )
 
