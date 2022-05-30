@@ -8,7 +8,7 @@
     </ProjectHome>
     <StartupFile>
     </StartupFile>
-    <SearchPath>..\..\..\;..\Crawling\</SearchPath>
+    <SearchPath>..\..\..\..\;..\Crawling\</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>testSearcher</Name>

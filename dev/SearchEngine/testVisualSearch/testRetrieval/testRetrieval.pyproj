@@ -6,7 +6,7 @@
     <ProjectGuid>071cf16a-2ab6-4d88-b144-42f2dde4ab78</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <StartupFile>testRetrieval_main.py</StartupFile>
-    <SearchPath>..\..\..\;..\Crawling\;..\testSearcher\</SearchPath>
+    <SearchPath>..\..\..\..\;..\Crawling\;..\testSearcher\</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>testRetrieval</Name>

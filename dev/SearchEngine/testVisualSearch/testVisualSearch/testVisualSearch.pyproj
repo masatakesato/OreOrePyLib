@@ -6,7 +6,7 @@
     <ProjectGuid>eeed7fab-ec3e-43c9-85c5-463197483032</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <StartupFile>VisualSearchClient_main.py</StartupFile>
-    <SearchPath>..\..\..\;..\Crawling\;..\testSearcher\</SearchPath>
+    <SearchPath>..\Crawling\;..\testSearcher\;..\..\..\..\</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>video2Frame</Name>

@@ -1,7 +1,7 @@
 ﻿import pathlib
 import argparse
 
-import oreorelib.network as oreoreRPC
+import oreorepylib.network as oreoreRPC
 
 from Searcher import Searcher
 

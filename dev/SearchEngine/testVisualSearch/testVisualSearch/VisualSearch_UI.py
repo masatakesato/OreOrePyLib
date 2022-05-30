@@ -12,7 +12,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
-from oreorelib.ui.pyqt5 import FlowLayout, stylesheet, ThreadIter, MainWindow
+from oreorepylib.ui.pyqt5 import FlowLayout, stylesheet, ThreadIter, MainWindow
 
 
 
