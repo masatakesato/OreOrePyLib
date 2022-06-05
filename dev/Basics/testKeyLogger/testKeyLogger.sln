@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1705
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "testKeyLogger", "testKeyLogger\testKeyLogger.pyproj", "{259DEA93-2761-44F2-B69D-3615C246A705}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "testPyhookKeylogger", "testPyhookKeylogger\testPyhookKeylogger.pyproj", "{EF36B750-41F0-4CA4-B188-94389E11AD0B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{259DEA93-2761-44F2-B69D-3615C246A705}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{259DEA93-2761-44F2-B69D-3615C246A705}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF36B750-41F0-4CA4-B188-94389E11AD0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF36B750-41F0-4CA4-B188-94389E11AD0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {10E97DEE-115C-4D25-831D-4D1B48F06F04}
+	EndGlobalSection
+EndGlobal
