@@ -241,6 +241,8 @@ class PipeServerRPC:
                 args = msg[1]
                 kwargs = msg[2] if len(msg)==3 else {}
 
+                print( "proc_name: ", proc_name, type(proc_name) )
+
                 # Do something
                 ret = getattr( self.__m_ProcInstance, proc_name )( *args, **kwargs )
 

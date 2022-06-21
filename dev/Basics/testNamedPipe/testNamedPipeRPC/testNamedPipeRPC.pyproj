@@ -10,7 +10,7 @@
     <OutputPath>.</OutputPath>
     <Name>testNamedPipeRPC</Name>
     <RootNamespace>testNamedPipeRPC</RootNamespace>
-    <InterpreterId>CondaEnv|CondaEnv|python27</InterpreterId>
+    <InterpreterId>CondaEnv|CondaEnv|testpy37</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>

@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{82481ccb-bdcd-453b-b785-d3f91e0f17af}</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>myServer.py</StartupFile>
+    <StartupFile>testClientServer_main.py</StartupFile>
     <SearchPath>..\..\..\..\..\OreOrePyLib;..\..\..\..\..\..\Lib\umsgpack</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -27,6 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="CondaEnv|CondaEnv|env_searchclient" />
+    <InterpreterReference Include="CondaEnv|CondaEnv|python27" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
