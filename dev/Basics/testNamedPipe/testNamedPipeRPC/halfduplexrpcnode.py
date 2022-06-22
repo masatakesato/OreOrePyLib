@@ -63,16 +63,20 @@ class HalfDuplexRPCNode:
         
         print( "HalfDuplexNode::StopListen()..." )
 
+        if( self.__m_ListenThread==None ):
+            return
+
         # Set polling flag to false
         #print("StopListen::self.__m_Receiver.SetListen(False)...")
         self.__m_Receiver.SetListen( False )
 
-        if( self.__m_ListenThread ):
-            #print("StopListen::Kernel32.OpenThread()...")
-            hthread = Kernel32.OpenThread( 0x40000000, False, self.__m_ListenThread.ident )
-            Kernel32.CancelSynchronousIo( hthread )
-            Kernel32.CloseHandle( hthread )
-            self.__m_ListenThread.join()
+        # Stop listening thread
+        #if( self.__m_ListenThread ):
+        #print("StopListen::Kernel32.OpenThread()...")
+        hthread = Kernel32.OpenThread( 0x40000000, False, self.__m_ListenThread.ident )
+        Kernel32.CancelSynchronousIo( hthread )
+        Kernel32.CloseHandle( hthread )
+        self.__m_ListenThread.join()
         self.__m_ListenThread = None
 
         # Release pipe instances

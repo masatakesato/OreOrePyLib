@@ -42,6 +42,7 @@ if __name__=="__main__":
 
     node.BindProcInstance( proc )
     node.StartListen()
+
    
     input_text = ""
 
