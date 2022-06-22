@@ -158,11 +158,12 @@ class PipeServerRPC:
         if( err > 0 ):
             print( "error check after client::CreateNamedPipe(): %d" % ctypes.GetLastError() )
             self.__m_PipeHandle = None
-            return
+            return False
 
         print( "Successfully created named pipe: %s" % self.__m_PipeName )
-
         self.__m_IsListening = True
+
+        return True
 
 
 

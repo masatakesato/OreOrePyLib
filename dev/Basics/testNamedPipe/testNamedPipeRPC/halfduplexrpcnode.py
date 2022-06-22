@@ -47,15 +47,19 @@ class HalfDuplexRPCNode:
 
         if( self.__m_Receiver.IsListening() ):
             print("  Aborting: already listening...")
-            return
+            return False
 
         # Init pipe
-        self.__m_Receiver.InitPipe()
+        if( not self.__m_Receiver.InitPipe() ):
+            print("  Aborting: pipe creation failed...")
+            return False
 
         # Start listen thread
         #print("StartListen::running thread...")
         self.__m_ListenThread = threading.Thread( target=self.__m_Receiver.Run )
         self.__m_ListenThread.start()
+
+        return True
 
 
 

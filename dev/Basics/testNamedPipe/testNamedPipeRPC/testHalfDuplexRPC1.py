@@ -1,7 +1,11 @@
 ﻿import oreorepylib.utils.compat as compat
+
 from halfduplexrpcnode import *
 
+import os
 import time
+
+
 
 g_InPipeName = r"\\.\pipe\Foo1"
 g_OutPipeName = r"\\.\pipe\Foo2"
@@ -37,11 +41,15 @@ class Procedure:
 
 if __name__=="__main__":
 
+    os.system( "title " + g_InPipeName )
+
     proc = Procedure()
     node = HalfDuplexRPCNode( g_InPipeName )
 
     node.BindProcInstance( proc )
-    node.StartListen()
+
+    if( not node.StartListen() ):
+        sys.exit()
 
    
     input_text = ""
