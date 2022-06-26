@@ -28,6 +28,13 @@ class Procedure:
         return a + b
 
 
+    def TestArrayTransfer( self, arr ):
+        print( "Procedure::TestArrayTransfer()..." )
+
+        for v in arr:
+            print( v )
+
+
 
 
 if __name__=="__main__":

@@ -22,3 +22,6 @@ if __name__=="__main__":
     print( client.Call( u"Ahgfdd", 4, 6 ) )
 
     print( client.Call( u"Add", 4, 6 ) )
+
+
+    print( client.Call( u"TestMemoryTransfer", [-1, -2, -3, -40] ) )
