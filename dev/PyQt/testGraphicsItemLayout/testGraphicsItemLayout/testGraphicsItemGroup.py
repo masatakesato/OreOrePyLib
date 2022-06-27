@@ -11,7 +11,7 @@ class GraphicsItemLayer:
 
     def __init__( self ):
         self.__m_ItemGroups = []
-        self.__m_CurrentIdx
+        self.__m_CurrentIdx = -1
 
 
     def __del__( self ):
