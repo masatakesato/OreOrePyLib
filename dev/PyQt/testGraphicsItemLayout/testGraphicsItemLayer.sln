@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32510.428
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "testGraphicsItemLayer", "testGraphicsItemLayout\testGraphicsItemLayer.pyproj", "{27B9F412-EF89-4466-9326-40E38D8C0BF8}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "testGraphicsItemLayer", "testGraphicsItemLayer\testGraphicsItemLayer.pyproj", "{27B9F412-EF89-4466-9326-40E38D8C0BF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
