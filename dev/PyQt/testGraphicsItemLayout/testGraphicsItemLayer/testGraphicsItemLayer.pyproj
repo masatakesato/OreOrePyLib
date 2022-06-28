@@ -5,7 +5,7 @@
     <ProjectGuid>27b9f412-ef89-4466-9326-40e38d8c0bf8</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>testGraphicsItemGroup.py</StartupFile>
+    <StartupFile>testGraphicsItemLayer_main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -24,7 +24,11 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="testGraphicsItemGroup.py" />
+    <Compile Include="EmbedExternalAppToQWidget_main.py" />
+    <Compile Include="EmbedNotepadToQWidget_main.py" />
+    <Compile Include="graphicsitemlayer.py" />
+    <Compile Include="testGraphicsItemLayer_main.py" />
+    <Compile Include="testOverlayViewOnWidget.py" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="CondaEnv|CondaEnv|testpyqt" />
