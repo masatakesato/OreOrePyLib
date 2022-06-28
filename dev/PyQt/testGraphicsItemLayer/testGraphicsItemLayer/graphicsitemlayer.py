@@ -59,7 +59,7 @@ class GraphicsItemLayer:
         self.__m_ParentScene.addItem( group )
         self.__m_LayerRoots.append( group )
 
-        return len( self.__m_LayerRoots )
+        return len( self.__m_LayerRoots ) - 1
 
 
     def InsertLayer( self, idx ):
