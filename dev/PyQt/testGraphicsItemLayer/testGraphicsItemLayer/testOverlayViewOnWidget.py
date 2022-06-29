@@ -78,18 +78,23 @@ class ExternalAppWidget( QWidget ):
 
 
 
-class MyFrame( QFrame ):
+class CanvasFrame( QFrame ):
 
     def __init__(self, parent=None):
-        super(MyFrame, self).__init__(parent=parent)
+        super(CanvasFrame, self).__init__(parent=parent)
         self.setLayout( QVBoxLayout() )
         self.layout().setContentsMargins( 0, 0, 0, 0 )
 
         self.nonlayoutwidgets = []
 
 
+#TODO: Add self.__m_BackgroundWidget
+#TODO: Add self.__m_OverlayWidget
+#TODO
+
+
     def resizeEvent( self, event ):
-        print( "MyFrame::resizeEvent()..." )
+        print( "CanvasFrame::resizeEvent()..." )
         r = self.rect()#self.layout().contentsRect()#
         gpos = self.mapToGlobal(r.topLeft())
 
@@ -99,8 +104,8 @@ class MyFrame( QFrame ):
         event.accept()
 
 
-    def moveChildren( self, pos ):
-        print( "MyFrame::moveChildren()...", pos.x(), pos.y() )
+    def moveChildren( self ):
+        print( "CanvasFrame::moveChildren()..." )
         r = self.rect()#self.layout().contentsRect()#
         gpos = self.mapToGlobal(r.topLeft())
 
@@ -120,8 +125,8 @@ class MyFrame( QFrame ):
 
 
     def mousePressEvent( self, event ):
-        print( "MyFrame::mousePressEvent" )
-        return super(MyFrame, self).mousePressEvent( event )
+        print( "CanvasFrame::mousePressEvent" )
+        return super(CanvasFrame, self).mousePressEvent( event )
 
 
 
@@ -156,7 +161,9 @@ class MyView( QGraphicsView ):
 
         painter.setBrush( Qt.lightGray )
         #painter.drawRect( QRect(0, 0, 100, 100) )
-        painter.fillRect(rect, QBrush(QColor(128, 128, 255, 1)))
+        painter.fillRect(rect, QBrush(QColor(128, 128, 255, 64)))
+
+
 
 
 
@@ -197,7 +204,7 @@ class windowOverlay(QWidget):
 
         time.sleep(0.5)
 
-        self.backgroundWidget = ExternalAppWidget( self )
+        self.backgroundWidget = ExternalAppWidget()
         self.backgroundWidget.BindHwnd( window_handles[0], notepad.pid )
         #self.backgroundWidget.show()
 
@@ -208,17 +215,16 @@ class windowOverlay(QWidget):
         self.view.setStyleSheet( 'background: rgba(255, 255, 64, 50);' )#self.view.setStyleSheet( 'background: transparent;' )
         self.view.setScene( self.scene )
 
-        #================ compose myFrame ==================#
-        self.myFrame = MyFrame()
+        #================ compose canvasFrame ==================#
+        self.canvasFrame = CanvasFrame()
         
-        self.myFrame.layout().addWidget( self.backgroundWidget )# 埋め込みアプリ背景ウィンドウはQLayoutに登録する
+        self.canvasFrame.layout().addWidget( self.backgroundWidget )# 埋め込みアプリ背景ウィンドウはQLayoutに登録する
 
-        self.myFrame.AddChildWidget( self.view )# QLayoutではなく直接QWidgetの子供にする & viewのアトリビュートを変更する
+        self.canvasFrame.AddChildWidget( self.view )# QLayoutではなく直接QWidgetの子供にする & viewのアトリビュートを変更する
         self.view.setAttribute( Qt.WA_NoSystemBackground )# バックグラウンドなし
         self.view.setAttribute( Qt.WA_TranslucentBackground )# ビューの背景を完全透明化する
         self.view.setWindowFlags( Qt.Tool | Qt.FramelessWindowHint | Qt.WindowDoesNotAcceptFocus )# 枠なしカバーウィンドウにする. Qt.WindowStaysOnTopHint: 全画面上で常に最前面にView表示させるフラグ.これは外す
         # プラットフォーム依存のQt.CoverWindowの代わりにQt.Toolを使っている
-
 
         self.button = QPushButton("Toggle Overlay")
         self.button.setFixedHeight(50)
@@ -228,7 +234,7 @@ class windowOverlay(QWidget):
 
 
         self.verticalLayout = QVBoxLayout( self )
-        self.verticalLayout.addWidget( self.myFrame )#self.view )#
+        self.verticalLayout.addWidget( self.canvasFrame )#self.view )#
         self.verticalLayout.addWidget( self.button )
         self.verticalLayout.addWidget( self.button2 )
 
@@ -293,8 +299,9 @@ class windowOverlay(QWidget):
     def moveEvent( self, event ):
         super(windowOverlay, self).moveEvent( event )
         print( "windowOverlay::moveEvent()..." )
-        if( self.view ): self.myFrame.moveChildren( event.pos() )
+        self.canvasFrame.moveChildren()
         event.accept()
+
 
 
 
