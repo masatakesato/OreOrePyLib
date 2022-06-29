@@ -104,16 +104,6 @@ class CanvasFrame( QFrame ):
         event.accept()
 
 
-    def moveChildren( self ):
-        print( "CanvasFrame::moveChildren()..." )
-        r = self.rect()#self.layout().contentsRect()#
-        gpos = self.mapToGlobal(r.topLeft())
-
-        for w in self.nonlayoutwidgets:
-            w.move( gpos )#pos.x() + r.x(), pos.y() + r.y() )#w.setGeometry( gpos.x(), gpos.y(), r.width(), r.height() )#
-            print( w.geometry() )
-
-
     def AddChildWidget( self, w ):
         w.setParent( self )
         self.nonlayoutwidgets.append(w)
@@ -127,6 +117,27 @@ class CanvasFrame( QFrame ):
     def mousePressEvent( self, event ):
         print( "CanvasFrame::mousePressEvent" )
         return super(CanvasFrame, self).mousePressEvent( event )
+
+
+
+    def FindTopLevelWidget( self ):
+        top_widget = self
+        while( top_widget.parentWidget() ):
+            top_widget = top_widget.parentWidget()
+
+        # TODO: Install EventFilter
+        if( top_widget ):
+            print( "installing event filter...", top_widget )
+            top_widget.installEventFilter( self )# MyEventFilter(top_widget, self) )
+
+
+
+    def eventFilter( self, obj: 'QObject', event: 'QEvent') -> bool:
+        gpos = self.mapToGlobal( self.rect().topLeft() )
+        for w in self.nonlayoutwidgets:
+            w.move( gpos )
+
+        return super(CanvasFrame, self).eventFilter(obj, event)
 
 
 
@@ -276,8 +287,7 @@ class windowOverlay(QWidget):
         self.button.clicked.connect( self.change_view_visibility )
         self.button2.clicked.connect( self.swap_layer )
 
-        self.view.show()
-        print( self.view.isVisible() )
+        #self.view.show()
 
 
 
@@ -296,14 +306,9 @@ class windowOverlay(QWidget):
         self.scene.m_Layers.MoveLayer(0, self.scene.m_Layers.NumLayers()-1 )
 
 
-    def moveEvent( self, event ):
-        super(windowOverlay, self).moveEvent( event )
-        print( "windowOverlay::moveEvent()..." )
-        self.canvasFrame.moveChildren()
-        event.accept()
-
-
-
+    def AAAA( self ):
+        self.canvasFrame.FindTopLevelWidget()
+        main.view.show()
 
 
 
@@ -311,8 +316,19 @@ if __name__ == "__main__":
 
     app = QApplication( sys.argv )
 
+    w = QWidget()
+    w.resize( 500, 500 )
+    w.setLayout( QVBoxLayout() )
+
     main = windowOverlay()
 
-    main.show()
+    
+    w.layout().addWidget( main )
+    main.AAAA()
+    
+    w.show()
+    
+
+    #main.show()
 
     sys.exit( app.exec_() )

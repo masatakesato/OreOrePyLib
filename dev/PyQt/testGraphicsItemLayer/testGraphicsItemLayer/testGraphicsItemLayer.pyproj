@@ -29,6 +29,7 @@
     <Compile Include="graphicsitemlayer.py" />
     <Compile Include="testGraphicsItemLayer_main.py" />
     <Compile Include="testOverlayViewOnWidget.py" />
+    <Compile Include="tttt.py" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="CondaEnv|CondaEnv|testpyqt" />
