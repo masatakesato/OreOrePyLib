@@ -2,101 +2,14 @@
 import time
 import traceback
 import subprocess
-import ctypes
-import numpy as np
 
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.QtOpenGL import *
-
-from OpenGL.GL import *
-from OpenGL.GLU import *
 
 import WindowHandleHelper
 import graphicsitemlayer
 
-
-
-
-class OpenGLWidget(QOpenGLWidget):
-
-    def __init__( self, parent=None):
-        super().__init__( parent=parent )
-        self.setWindowTitle("Triangle, PyQt5, OpenGL ES 2.0")
-        self.resize(300, 300)
-
-    def initializeGL(self):
-        glClearColor(0.5, 0.8, 0.7, 1.0)
-        vertShaderSrc = """
-            attribute vec3 aPosition;
-            void main()
-            {
-                gl_Position = vec4(aPosition, 1.0);
-            }
-        """
-        fragShaderSrc = """
-            void main()
-            {
-                gl_FragColor = vec4(0.5, 0.2, 0.9, 1.0);
-            }
-        """
-        program = QOpenGLShaderProgram()
-        program.addShaderFromSourceCode(QOpenGLShader.Vertex, vertShaderSrc)
-        program.addShaderFromSourceCode(QOpenGLShader.Fragment, fragShaderSrc)
-        program.link()
-        program.bind()
-        vertPositions = np.array([
-            -0.5, -0.5, 0.0,
-            0.5, -0.5, 0.0,
-            0.0, 0.5, 0.0], dtype=np.float32)
-        self.vertPosBuffer = QOpenGLBuffer()
-        self.vertPosBuffer.create()
-        self.vertPosBuffer.bind()
-        self.vertPosBuffer.allocate(vertPositions, len(vertPositions) * 4)
-        program.bindAttributeLocation("aPosition", 0)
-        program.setAttributeBuffer(0, GL_FLOAT, 0, 3)
-        program.enableAttributeArray(0)
-
-    def paintGL(self):
-        glClear(GL_COLOR_BUFFER_BIT)
-        glDrawArrays(GL_TRIANGLES, 0, 3)
-
-
-
-
-class glWidget(QGLWidget):
-    def __init__(self, parent=None):
-        QGLWidget.__init__(self, parent)
-        self.setMinimumSize(640, 480)
-
-    def paintGL(self):
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        glLoadIdentity()
-        glTranslatef(-4.5, 0.5, -6.0)
-        glColor3f( 1.0, 1.5, 0.0 );
-        glPolygonMode(GL_FRONT, GL_FILL);
-        glBegin(GL_TRIANGLES)
-        glVertex3f(2.0,-1.2,0.0)
-        glVertex3f(2.6,0.0,0.0)
-        glVertex3f(2.9,-1.2,0.0)
-        glEnd()
-        glFlush()
-
-    def initializeGL(self):
-        glClearDepth(1.0)              
-        glDepthFunc(GL_LESS)
-        glEnable(GL_DEPTH_TEST)
-        glShadeModel(GL_SMOOTH)
-        glMatrixMode(GL_PROJECTION)
-        glLoadIdentity()                    
-        gluPerspective(45.0,1.33,0.1, 100.0) 
-        glMatrixMode(GL_MODELVIEW)
-
-
-    def paintEvent( self, event ):
-        print( "glWidget::paintEvent()..." )
-        return super(glWidget, self).paintEvent( event )
 
 
 
@@ -107,10 +20,7 @@ class ExternalAppWidget( QWidget ):
         super( ExternalAppWidget, self ).__init__( parent=parent )
 
         self.setLayout( QVBoxLayout() ) 
-
-        self.layout().setSpacing(0)
-        #self.layout().setMargin(0)
-        self.layout().setContentsMargins (0, 0, 0, 0)
+        self.layout().setContentsMargins( 0, 0, 0, 0 )
 
         self.__m_AppWindow = None
         self.__m_WindowWidget = None
@@ -168,46 +78,39 @@ class ExternalAppWidget( QWidget ):
 
 
 
-class BackgroundWidget( QWidget ):
-
-    def __init__(self, parent=None):
-        super(BackgroundWidget, self).__init__(parent=parent)
-        self.nonlayoutwidgets = []
-
-
-    def mousePressEvent( self, event ):
-        print( "BackgroundWidget::mousePressEvent" )
-        return super(BackgroundWidget, self).mousePressEvent( event )
-
-
-
-
 class MyFrame( QFrame ):
 
     def __init__(self, parent=None):
         super(MyFrame, self).__init__(parent=parent)
+        self.setLayout( QVBoxLayout() )
+        self.layout().setContentsMargins( 0, 0, 0, 0 )
+
         self.nonlayoutwidgets = []
 
 
     def resizeEvent( self, event ):
         print( "MyFrame::resizeEvent()..." )
-        r = self.rect()#self.layout().contentsRect()
+        r = self.rect()#self.layout().contentsRect()#
+        gpos = self.mapToGlobal(r.topLeft())
+
         for w in self.nonlayoutwidgets:
-            w.resize( r.width(), r.height() )# event.size() )#
-            print( w.geometry() )
+            w.setGeometry( gpos.x(), gpos.y(), r.width(), r.height() )#w.resize( r.width(), r.height() )# event.size() )#
+            print( "resizing: ", w.geometry() )
         event.accept()
 
 
     def moveChildren( self, pos ):
-        print( "MyFrame::moveChildren()..." )
-        r = self.layout().contentsRect()
+        print( "MyFrame::moveChildren()...", pos.x(), pos.y() )
+        r = self.rect()#self.layout().contentsRect()#
+        gpos = self.mapToGlobal(r.topLeft())
+
         for w in self.nonlayoutwidgets:
-            w.move( pos.x() + r.x(), pos.y() + r.y() )
+            w.move( gpos )#pos.x() + r.x(), pos.y() + r.y() )#w.setGeometry( gpos.x(), gpos.y(), r.width(), r.height() )#
             print( w.geometry() )
 
 
     def AddChildWidget( self, w ):
-        w.setParent(self)
+        w.setParent( self )
         self.nonlayoutwidgets.append(w)
 
 
@@ -234,6 +137,8 @@ class MyView( QGraphicsView ):
         #self.setOptimizationFlags( QGraphicsView.DontSavePainterState )
         #self.setViewportUpdateMode( QGraphicsView.SmartViewportUpdate )
         #self.setCacheMode( QGraphicsView.CacheBackground )
+
+        self.setContentsMargins( 0, 0, 0, 0 )
 
 
     def mousePressEvent( self, event ):
@@ -279,6 +184,8 @@ class windowOverlay(QWidget):
     def __init__(self, parent=None):
         super(windowOverlay, self).__init__(parent)
 
+        self.resize( 0, 0 )
+
         ############### Embedded application background test ###############
 
         notepad = subprocess.Popen( r"D:/Program Files (x86)/sakura/sakura.exe" )
@@ -297,20 +204,20 @@ class windowOverlay(QWidget):
         #================ Setup GraphicsScene/View ===============#
         self.scene = MyScene()
         self.view = MyView( )
+
         self.view.setStyleSheet( 'background: rgba(255, 255, 64, 50);' )#self.view.setStyleSheet( 'background: transparent;' )
         self.view.setScene( self.scene )
 
         #================ compose myFrame ==================#
         self.myFrame = MyFrame()
-        self.myFrame.setLayout( QVBoxLayout() )
         
+        self.myFrame.layout().addWidget( self.backgroundWidget )# 埋め込みアプリ背景ウィンドウはQLayoutに登録する
+
         self.myFrame.AddChildWidget( self.view )# QLayoutではなく直接QWidgetの子供にする & viewのアトリビュートを変更する
         self.view.setAttribute( Qt.WA_NoSystemBackground )# バックグラウンドなし
         self.view.setAttribute( Qt.WA_TranslucentBackground )# ビューの背景を完全透明化する
         self.view.setWindowFlags( Qt.Tool | Qt.FramelessWindowHint | Qt.WindowDoesNotAcceptFocus )# 枠なしカバーウィンドウにする. Qt.WindowStaysOnTopHint: 全画面上で常に最前面にView表示させるフラグ.これは外す
         # プラットフォーム依存のQt.CoverWindowの代わりにQt.Toolを使っている
-
-        self.myFrame.layout().addWidget( self.backgroundWidget )# 埋め込みアプリ背景ウィンドウはQLayoutに登録する
 
 
         self.button = QPushButton("Toggle Overlay")
@@ -320,21 +227,21 @@ class windowOverlay(QWidget):
         self.button2.setFixedHeight(50)
 
 
-        self.verticalLayout = QVBoxLayout( self )# QStackedLayout(self)#
-        #self.layout().setStackingMode( QStackedLayout.StackAll )
+        self.verticalLayout = QVBoxLayout( self )
         self.verticalLayout.addWidget( self.myFrame )#self.view )#
         self.verticalLayout.addWidget( self.button )
         self.verticalLayout.addWidget( self.button2 )
 
+        #self.layout().setContentsMargins( 0, 0, 0, 0 )
 
-        #self.scene.addItem( rect )
+        
 
         # レイヤー作成テスト
         layer_id = self.scene.m_Layers.AddLayer()
 
         # define rect item
         rect = QGraphicsRectItem()
-        rect.setRect( 0, 0, 60, 20 )
+        rect.setRect( 0, 0, 250, 160 )
         rect.setBrush( Qt.red )
         rect.setFlag( QGraphicsItem.ItemSendsGeometryChanges )
         rect.setFlag( QGraphicsItem.ItemIsMovable )
@@ -356,24 +263,26 @@ class windowOverlay(QWidget):
         rect2.setFlag( QGraphicsItem.ItemIsFocusable, False )
 
         self.scene.m_Layers.AddItem( rect2, layer_id )
-
-
-
-        self.scene.m_Layers.DeleteItem( rect2, layer_id )
-
+        #self.scene.m_Layers.DeleteItem( rect2, layer_id )
 
 
        
-        self.button.clicked.connect( lambda: self.button_off() if self.view.isVisible() else self.button_on() )
+        self.button.clicked.connect( self.change_view_visibility )
         self.button2.clicked.connect( self.swap_layer )
 
-
-    def button_on( self ):
         self.view.show()
+        print( self.view.isVisible() )
 
 
-    def button_off( self ):
-        self.view.hide()
+
+    def change_view_visibility( self ):
+        print( "windowOverlay::change_view_visibility()..." )
+        if( self.view.isVisible()==False ):
+            self.view.show()
+            print( "On")
+        else:
+            self.view.hide()
+            print("Off")
 
 
     def swap_layer( self ):
@@ -396,8 +305,6 @@ if __name__ == "__main__":
     app = QApplication( sys.argv )
 
     main = windowOverlay()
-
-    #app.focusChanged.connect( lambda old, new: main.onTabFocusChanged( old, new ) )
 
     main.show()
 
