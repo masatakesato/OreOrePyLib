@@ -24,6 +24,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="canvasframe.py" />
     <Compile Include="EmbedExternalAppToQWidget_main.py" />
     <Compile Include="EmbedNotepadToQWidget_main.py" />
     <Compile Include="externalappwidget.py" />
