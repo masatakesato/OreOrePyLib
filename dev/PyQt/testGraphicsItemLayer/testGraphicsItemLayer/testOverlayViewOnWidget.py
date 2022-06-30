@@ -25,6 +25,16 @@ class MyView( QGraphicsView ):
         #self.setViewportUpdateMode( QGraphicsView.SmartViewportUpdate )
         #self.setCacheMode( QGraphicsView.CacheBackground )
 
+        self.__m_Brush = QBrush( QColor() )
+
+        # 外部アプリ埋め込みウィンドウに半透明背景を重ね掛けする場合に必要
+        self.setStyleSheet( 'background: transparent;' )#self.setStyleSheet( 'background: rgba(0, 0, 0, 1);' )#
+
+
+    def SetBackgroundColor( self, r : "int", g : "int", b : "int", a : "int" ):
+        self.__m_Brush.setColor( QColor(r, g, b, a) )
+        print( self.__m_Brush.color().red(), self.__m_Brush.color().green(), self.__m_Brush.color().blue(), self.__m_Brush.color().alpha() )
+
 
     def mousePressEvent( self, event ):
         print( "MyView::mousePressEvent" )
@@ -38,7 +48,9 @@ class MyView( QGraphicsView ):
 
 
     def drawBackground( self, painter, rect ):
-        painter.fillRect(rect, QBrush(QColor(128, 128, 255, 64)))
+        painter.fillRect( rect, self.__m_Brush )
+        
+
 
 
 
@@ -70,8 +82,8 @@ class windowOverlay(QWidget):
         #================ Setup GraphicsScene/View ===============#
         self.scene = graphicsitemlayer.LayeredGraphicsScene()
         self.view = MyView()
+        self.view.SetBackgroundColor( 0, 255, 0, 128 )
 
-        self.view.setStyleSheet( 'background: rgba(255, 255, 64, 50);' )#self.view.setStyleSheet( 'background: transparent;' )
         self.view.setScene( self.scene )
 
         #================ compose canvasFrame ==================#

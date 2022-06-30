@@ -5,13 +5,11 @@ from PyQt5.QtGui import *
 
 
 class LayerRoot( QGraphicsItem ):
-    pass
 
     def __init__( self ):
         super(LayerRoot, self).__init__()
 
         #self.__m_refItems = {}
-
 
 
     def AddItem( self, item ):
@@ -36,6 +34,7 @@ class LayerRoot( QGraphicsItem ):
 
     def paint( self, painter, option, widget ):
         pass
+
 
 
 
@@ -278,8 +277,3 @@ class LayeredGraphicsScene( QGraphicsScene ):
     def mousePressEvent( self, event ):
         print( "LayeredGraphicsScene::mousePressEvent" )
         return super().mousePressEvent(event)
-
-
-
-
-
