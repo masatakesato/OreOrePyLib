@@ -8,72 +8,73 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
 import WindowHandleHelper
+
 import graphicsitemlayer
+import externalappwidget
 
 
 
 
+#class ExternalAppWidget( QWidget ):
 
-class ExternalAppWidget( QWidget ):
+#    def __init__( self, parent=None ):
+#        super( ExternalAppWidget, self ).__init__( parent=parent )
 
-    def __init__( self, parent=None ):
-        super( ExternalAppWidget, self ).__init__( parent=parent )
+#        self.setLayout( QVBoxLayout() ) 
+#        self.layout().setContentsMargins( 0, 0, 0, 0 )
 
-        self.setLayout( QVBoxLayout() ) 
-        self.layout().setContentsMargins( 0, 0, 0, 0 )
-
-        self.__m_AppWindow = None
-        self.__m_WindowWidget = None
-
-
-    #def __del__( self ):
-    #    #self.__p.terminate()
-    #    if( self.__m_AppWindow ):
-    #        self.__m_AppWindow.close()
+#        self.__m_AppWindow = None
+#        self.__m_WindowWidget = None
 
 
-    def BindHwnd( self, window_handle, processhandle ):
+#    #def __del__( self ):
+#    #    #self.__p.terminate()
+#    #    if( self.__m_AppWindow ):
+#    #        self.__m_AppWindow.close()
+
+
+#    def BindHwnd( self, window_handle, processhandle ):
         
-        self.__m_AppWindow =  QWindow.fromWinId( window_handle )
-        self.__m_WindowWidget = QWidget.createWindowContainer( self.__m_AppWindow, self )
+#        self.__m_AppWindow =  QWindow.fromWinId( window_handle )
+#        self.__m_WindowWidget = QWidget.createWindowContainer( self.__m_AppWindow, self )
 
-        self.layout().addWidget( self.__m_WindowWidget )
-
-
-    def UnbindHWnd( self ):
-        try:
-            # 外部アプリ埋め込んだwindowと、はめ込んでる__m_WindowWidgetを、下記の順番でSetParentする必要がある
-            if( self.__m_WindowWidget ):
-                self.__m_WindowWidget.setParent( None )
-                self.__m_AppWindow.setParent( None )
-
-                self.__m_WindowWidget = None
-                self.__m_AppWindow = None
-
-        except Exception as e:
-            import traceback
-            traceback.print_exc()
+#        self.layout().addWidget( self.__m_WindowWidget )
 
 
-    def mousePressEvent( self, event ):
-        print( "ExternalAppWidget::mousePressEvent" )
-        return super(ExternalAppWidget, self).mousePressEvent(event)
+#    def UnbindHWnd( self ):
+#        try:
+#            # 外部アプリ埋め込んだwindowと、はめ込んでる__m_WindowWidgetを、下記の順番でSetParentする必要がある
+#            if( self.__m_WindowWidget ):
+#                self.__m_WindowWidget.setParent( None )
+#                self.__m_AppWindow.setParent( None )
+
+#                self.__m_WindowWidget = None
+#                self.__m_AppWindow = None
+
+#        except Exception as e:
+#            import traceback
+#            traceback.print_exc()
 
 
-    def mouseReleaseEvent( self, event ):
-        print( "ExternalAppWidget::mouseReleaseEvent" )
-        return super(ExternalAppWidget, self).mouseReleaseEvent(event)
+#    def mousePressEvent( self, event ):
+#        print( "ExternalAppWidget::mousePressEvent" )
+#        return super(ExternalAppWidget, self).mousePressEvent(event)
 
 
-    def keyPressEvent( self, event ):
-        print( "ExternalAppWidget::keyPressEvent" )
-        return super(ExternalAppWidget, self).keyPressEvent( event )
+#    def mouseReleaseEvent( self, event ):
+#        print( "ExternalAppWidget::mouseReleaseEvent" )
+#        return super(ExternalAppWidget, self).mouseReleaseEvent(event)
 
 
-    def closeEvent( self, event ):
-        print( "MyWidget::closeEvent" )
-        self.UnbindHWnd()
-        return super(ExternalAppWidget, self).closeEvent( event )
+#    def keyPressEvent( self, event ):
+#        print( "ExternalAppWidget::keyPressEvent" )
+#        return super(ExternalAppWidget, self).keyPressEvent( event )
+
+
+#    def closeEvent( self, event ):
+#        print( "MyWidget::closeEvent" )
+#        self.UnbindHWnd()
+#        return super(ExternalAppWidget, self).closeEvent( event )
 
 
 
@@ -146,15 +147,11 @@ class MyView( QGraphicsView ):
 
     def __init__( self, parent=None ):
         super(MyView, self).__init__(parent=parent)
-        self.setEnabled(True)
+        #self.setEnabled(True)
 
-        self.setFocusPolicy(Qt.NoFocus)
-        self.setAttribute( Qt.WA_TransparentForMouseEvents, False )
         #self.setOptimizationFlags( QGraphicsView.DontSavePainterState )
         #self.setViewportUpdateMode( QGraphicsView.SmartViewportUpdate )
         #self.setCacheMode( QGraphicsView.CacheBackground )
-
-        self.setContentsMargins( 0, 0, 0, 0 )
 
 
     def mousePressEvent( self, event ):
@@ -169,28 +166,7 @@ class MyView( QGraphicsView ):
 
 
     def drawBackground( self, painter, rect ):
-
-        painter.setBrush( Qt.lightGray )
-        #painter.drawRect( QRect(0, 0, 100, 100) )
         painter.fillRect(rect, QBrush(QColor(128, 128, 255, 64)))
-
-
-
-
-
-
-class MyScene( QGraphicsScene ):
-
-    def __init__( self, *args, **kwargs ):
-        super(MyScene, self).__init__(*args, **kwargs)
-
-        self.m_Layers = graphicsitemlayer.GraphicsItemLayer( self )
-
-
-
-    def mousePressEvent( self, event ):
-        print( "MyScene::mousePressEvent" )
-        return super().mousePressEvent(event)
 
 
 
@@ -215,13 +191,13 @@ class windowOverlay(QWidget):
 
         time.sleep(0.5)
 
-        self.backgroundWidget = ExternalAppWidget()
+        self.backgroundWidget = externalappwidget.ExternalAppWidget()
         self.backgroundWidget.BindHwnd( window_handles[0], notepad.pid )
         #self.backgroundWidget.show()
 
         #================ Setup GraphicsScene/View ===============#
-        self.scene = MyScene()
-        self.view = MyView( )
+        self.scene = graphicsitemlayer.LayeredGraphicsScene()
+        self.view = MyView()
 
         self.view.setStyleSheet( 'background: rgba(255, 255, 64, 50);' )#self.view.setStyleSheet( 'background: transparent;' )
         self.view.setScene( self.scene )
@@ -254,7 +230,7 @@ class windowOverlay(QWidget):
         
 
         # レイヤー作成テスト
-        layer_id = self.scene.m_Layers.AddLayer()
+        layer_id = self.scene.AddLayer()
 
         # define rect item
         rect = QGraphicsRectItem()
@@ -265,10 +241,10 @@ class windowOverlay(QWidget):
         rect.setFlag( QGraphicsItem.ItemIsSelectable )
         rect.setFlag( QGraphicsItem.ItemIsFocusable, False )
 
-        self.scene.m_Layers.AddItem( rect, layer_id )
+        self.scene.AddItem( rect, layer_id )
 
 
-        layer_id = self.scene.m_Layers.AddLayer()
+        layer_id = self.scene.AddLayer()
 
         # define rect item
         rect2 = QGraphicsRectItem()
@@ -279,8 +255,8 @@ class windowOverlay(QWidget):
         rect2.setFlag( QGraphicsItem.ItemIsSelectable )
         rect2.setFlag( QGraphicsItem.ItemIsFocusable, False )
 
-        self.scene.m_Layers.AddItem( rect2, layer_id )
-        #self.scene.m_Layers.DeleteItem( rect2, layer_id )
+        self.scene.AddItem( rect2, layer_id )
+        #self.scene.DeleteItem( rect2, layer_id )
 
 
        
@@ -303,7 +279,7 @@ class windowOverlay(QWidget):
 
     def swap_layer( self ):
         print( "windowOverlay::swap_layer()..." )
-        self.scene.m_Layers.MoveLayer(0, self.scene.m_Layers.NumLayers()-1 )
+        self.scene.MoveLayer(0, self.scene.NumLayers()-1 )
 
 
     def AAAA( self ):

@@ -200,3 +200,86 @@ class GraphicsItemLayer:
 
 
 
+
+class LayeredGraphicsScene( QGraphicsScene ):
+
+    def __init__( self, *args, **kwargs ):
+        super(LayeredGraphicsScene, self).__init__(*args, **kwargs)
+
+        self.__m_LayerRoots = []
+        self.__m_CurrentIdx = -1
+
+
+    def __del__( self ):
+        self.__m_LayerRoots.clear()
+        self.__m_CurrentIdx = -1
+
+
+    def AddLayer( self ):
+        group = LayerRoot()
+        group.setZValue( len(self.__m_LayerRoots) )
+        self.addItem( group )
+        self.__m_LayerRoots.append( group )
+
+        return len( self.__m_LayerRoots ) - 1
+
+
+    def InsertLayer( self, idx ):
+        self.__m_LayerRoots.insert( idx, QGraphicsItemGroup() )
+        self.__UpdateDepth( idx, len(self.__m_LayerRoots) )
+
+
+    def DeleteLayer( self, idx ):
+        if( idx < len(self.__m_LayerRoots) ):
+            self.removeItem( self.__m_LayerRoots[ idx ] )
+            del self.__m_LayerRoots[ idx ]
+            self.__UpdateDepth( idx, len(self.__m_LayerRoots) )
+
+
+    def MoveLayer( self, idx, new_idx ):
+        if( idx != new_idx ):
+            # move element
+            elm = self.__m_LayerRoots.pop( idx )
+            self.__m_LayerRoots.insert( new_idx, elm )
+            # update depth
+            self.__UpdateDepth( min(idx, new_idx), max(idx, new_idx) + 1 )
+
+
+    def SetVisible( self, idx, visible ):
+        self.__m_LayerRoots[idx].setVisible( visible )
+
+
+    def SetEditable( self, idx, editable ): pass
+
+
+    def CurrentLayer( self ): pass
+
+
+    def NumLayers( self ):
+        return len( self.__m_LayerRoots )
+
+
+    def AddItem( self, item, idx ):
+        if( idx < len(self.__m_LayerRoots) ):
+            self.__m_LayerRoots[idx].AddItem( item )
+
+
+    def DeleteItem( self, item, idx ):
+        if( idx < len(self.__m_LayerRoots) ):
+            self.__m_LayerRoots[idx].DeleteItem( item )
+
+
+    def __UpdateDepth( self, begin_, end_ ):
+        for i in range(begin_, end_):
+            self.__m_LayerRoots[i].setZValue(i)
+
+
+
+    def mousePressEvent( self, event ):
+        print( "LayeredGraphicsScene::mousePressEvent" )
+        return super().mousePressEvent(event)
+
+
+
+
+

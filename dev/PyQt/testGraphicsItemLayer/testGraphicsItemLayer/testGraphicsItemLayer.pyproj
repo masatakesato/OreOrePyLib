@@ -26,6 +26,7 @@
   <ItemGroup>
     <Compile Include="EmbedExternalAppToQWidget_main.py" />
     <Compile Include="EmbedNotepadToQWidget_main.py" />
+    <Compile Include="externalappwidget.py" />
     <Compile Include="graphicsitemlayer.py" />
     <Compile Include="testGraphicsItemLayer_main.py" />
     <Compile Include="testOverlayViewOnWidget.py" />
