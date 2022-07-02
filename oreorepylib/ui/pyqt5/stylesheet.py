@@ -734,6 +734,11 @@ QFrame
 }
 
 /*====================== TabWidget settings ==========================*/
+QTabWidget
+{
+    background-color: rgb(42,42,42);
+}
+
 QTabWidget::pane
 {
     /*background-color: transparent;*/ /* valid inside padding area */

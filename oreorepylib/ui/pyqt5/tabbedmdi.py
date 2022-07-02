@@ -358,7 +358,7 @@ class TabWidget(QTabWidget):
 
         self.setWindowTitle( '        ' )
         self.setStyleSheet(  g_TabWidgetStyleSheet )
-        self.setAttribute( Qt.WA_NoMousePropagation )# Avoid mouse event propagation to parent widget(OwnerFrame...)
+        self.setAttribute( Qt.WA_NoMousePropagation | Qt.WA_StyledBackground )# Avoid mouse event propagation to parent widget(OwnerFrame...)
         self.setFocusPolicy( Qt.StrongFocus )
 
         self.tabCloseRequested.connect( self.DeleteTab )
