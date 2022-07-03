@@ -1078,6 +1078,9 @@ class TabbedMDIManager:
         floater.SetAttribs( { 'TabClosable': ownerWidget.IsTabClosable(index), 'Size': ownerWidget.size() } )
         floater.setWindowTitle( contentWidget.windowTitle() )
         floater.resize( contentWidget.size() )
+
+TODO: Implement Floater::AddWidgetToLayout( widget )
+
         floater.layout().addWidget( contentWidget )
         contentWidget.setVisible(True)# MUST SET VISIBLE. Widgets detached from QTabWidget are INVISIBLE.
 
@@ -1171,7 +1174,7 @@ class TabbedMDIManager:
 
                 contentWidget = floater.layout().itemAt(0).widget()
 
-
+TODO: Implement DockableFrame::AddTab( page, label ), AddTab( page, icon, label )
                 ownerWidget.addTab( contentWidget, contentWidget.windowTitle() )
                 ownerWidget.SetTabClosable( 0, floater.GetAttribs()[ 'TabClosable' ] )
                 ownerWidget.resize( floater.GetAttribs()[ 'Size' ] )
@@ -1280,6 +1283,8 @@ class TabbedMDIManager:
                 
                 if( floater.layout().count() > 0 ):
                     contentWidget = floater.layout().itemAt(0).widget()
+TODO: Implement DockableFrame::InsertTab( index, page, label ), InsertTab( index, page, icon, label )
+
                     ownerWidget.insertTab( index, contentWidget, contentWidget.windowTitle() )
                     ownerWidget.SetTabClosable( index, attribs[ 'TabClosable' ] )
                     ownerWidget.activateWindow()
@@ -1319,6 +1324,8 @@ class TabbedMDIManager:
                     tabClosable = srcDockable.IsTabClosable(0)
 
                     # insert into tab position[index + i]
+TODO: Implement DockableFrame::InsertTab( index, page, label ), InsertTab( index, page, icon, label )
+
                     destDockable.insertTab( index+i, contentWidget, contentWidget.windowTitle() )
                     destDockable.SetTabClosable( index+i, tabClosable )
                     contentWidget.setVisible(True)
