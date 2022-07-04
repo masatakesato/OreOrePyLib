@@ -38,7 +38,7 @@ class MainWindow(Frame):
         return self.m_content
 
 
-TODO: Deal with non-layouted child widgets.// unbind children -> setparent -> bind children again
+#TODO: Deal with non-layouted child widgets.// unbind children -> setparent -> bind children again
     def setCentralWidget( self, widget ):
         if( self.m_content ):
             self.m_content.hide()
