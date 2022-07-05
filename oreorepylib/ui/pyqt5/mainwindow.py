@@ -3,7 +3,14 @@ from .stylesheet import *
 
 
 
-class MainWindow(Frame):
+
+#####################################################################################
+#                                                                                   #
+#                                   MainWindow                                      #
+#                                                                                   #
+#####################################################################################
+
+class MainWindow( Frame ):
 
     def __init__( self, parent=None ):
         super(MainWindow, self).__init__(parent=parent)
@@ -46,6 +53,9 @@ class MainWindow(Frame):
         self.m_content = widget
         self.m_content.setSizePolicy( QSizePolicy.Preferred, QSizePolicy.Preferred )
         self.framelayout.addWidget( self.m_content )
+
+        #AddWidgetToLayout( self.framelayout, self.m_content, [[Qt.WA_NoSystemBackground, Qt.WA_TranslucentBackground]], Qt.Tool | Qt.FramelessWindowHint )
+
 
 
 

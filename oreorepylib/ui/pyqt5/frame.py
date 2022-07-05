@@ -4,6 +4,7 @@
 from .resource import *
 from .stylesheet import *
 
+import traceback
 import typing
 from enum import IntEnum
 
@@ -13,14 +14,55 @@ from PyQt5.QtWidgets import *
 
 
 
-class Region(IntEnum):
+
+#####################################################################################
+#                                                                                   #
+#                                    Helper functions                               #
+#                                                                                   #
+#####################################################################################
+
+def AddWidgetToLayout( layout: QLayout, widget: QWidget, attribs: typing.List[typing.List[Qt.WidgetAttribute]], windowflags: typing.Set[typing.Union[Qt.WindowFlags, Qt.WindowType]] ):
+    try:
+        # Unparent all non-layout child widgets
+        nonLayoutChildren = [ ch for ch in widget.children() if not ch in widget.layout().children() and isinstance(ch, QWidget) ]
+        for i in range(len(nonLayoutChildren)):
+            nonLayoutChildren[i].setParent(None)
+
+        # Add widget to layout
+        layout.addWidget( widget )
+
+        # Re-parent non-layout children to widget
+        for i in range( len(nonLayoutChildren) ):
+            ch = nonLayoutChildren[i]
+            # Set parent
+            ch.setParent( widget )
+
+            # Set attributes
+            for attr in attribs[i]:
+                ch.setAttribute( attr )
+            # Set window flags
+            ch.setWindowFlags( windowflags )
+
+    except:
+        traceback.print_exc()
+
+
+
+
+#####################################################################################
+#                                                                                   #
+#                                    ResizeHandle                                   #
+#                                                                                   #
+#####################################################################################
+
+class Region( IntEnum ):
     Below   = -1
     Inside  = 0
     Above   = 1
 
 
 
-class ResizeHandle(QFrame):
+class ResizeHandle( QFrame ):
     
     region_info = {
         'TopLeft':    ((-1,-1), Qt.SizeFDiagCursor), 'Top':    ((0,-1), Qt.SizeVerCursor), 'TopRight':    ((1,-1), Qt.SizeBDiagCursor),
@@ -52,7 +94,13 @@ class ResizeHandle(QFrame):
 
 
 
-class TitleButton(QFrame):
+#####################################################################################
+#                                                                                   #
+#                                    TitleButton                                    #
+#                                                                                   #
+#####################################################################################
+
+class TitleButton( QFrame ):
 
     clicked = pyqtSignal()
 
@@ -108,7 +156,13 @@ class TitleButton(QFrame):
 
 
 
-class TitleBar(QFrame):
+#####################################################################################
+#                                                                                   #
+#                                    TitleBar                                       #
+#                                                                                   #
+#####################################################################################
+
+class TitleBar( QFrame ):
 
     def __init__( self, ownerWidget: QWidget ):
         super(TitleBar, self).__init__()
@@ -206,9 +260,13 @@ class TitleBar(QFrame):
 
 
 
+#####################################################################################
+#                                                                                   #
+#                                      Frame                                        #
+#                                                                                   #
+#####################################################################################
 
-
-class Frame(QFrame):
+class Frame( QFrame ):
 
     TopLeft = 1
     Top = 2
@@ -399,26 +457,31 @@ class Frame(QFrame):
 
     # Special method for widget parenting. Deals with non-layout children.
     def AddWidgetToLayout( self, widget: QWidget, attribs: typing.List[typing.List[Qt.WidgetAttribute]], windowflags: typing.Set[typing.Union[Qt.WindowFlags, Qt.WindowType]] ):
+        AddWidgetToLayout( self.layout(), widget, attribs, windowflags )
 
-        # Unparent all non-layout child widgets
-        nonLayoutChildren = [ ch for ch in widget.children() if not ch in widget.layout().children() and isinstance(ch, QWidget) ]
-        for i in range(len(nonLayoutChildren)):
-            nonLayoutChildren[i].setParent(None)
+        #try:
+        #    # Unparent all non-layout child widgets
+        #    nonLayoutChildren = [ ch for ch in widget.children() if not ch in widget.layout().children() and isinstance(ch, QWidget) ]
+        #    for i in range(len(nonLayoutChildren)):
+        #        nonLayoutChildren[i].setParent(None)
 
-        # Add widget to layout
-        self.layout().addWidget( widget )
+        #    # Add widget to layout
+        #    self.layout().addWidget( widget )
 
-        # Re-parent non-layout children to widget
-        for i in range( len(nonLayoutChildren) ):
-            ch = nonLayoutChildren[i]
-            # Set parent
-            ch.setParent( widget )
+        #    # Re-parent non-layout children to widget
+        #    for i in range( len(nonLayoutChildren) ):
+        #        ch = nonLayoutChildren[i]
+        #        # Set parent
+        #        ch.setParent( widget )
 
-            # Set attributes
-            for attr in attribs[i]:
-                ch.setAttribute( attr )
-            # Set window flags
-            ch.setWindowFlags( windowflags )
+        #        # Set attributes
+        #        for attr in attribs[i]:
+        #            ch.setAttribute( attr )
+        #        # Set window flags
+        #        ch.setWindowFlags( windowflags )
+
+        #except:
+        #    traceback.print_exc()
 
 
 

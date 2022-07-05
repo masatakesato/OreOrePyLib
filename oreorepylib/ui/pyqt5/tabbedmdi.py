@@ -13,14 +13,15 @@ class Duration(Enum):
     Volatile = 0x01   # Automatically deleted if no child tab exists.
 
 
-# Tab anchor
-class Anchor(Enum):
-    Off = 0x00
-    On = 0x01
 
 
+#####################################################################################
+#                                                                                   #
+#                                     Floater                                       #
+#                                                                                   #
+#####################################################################################
 
-class Floater(Frame):
+class Floater( Frame ):
 
     # Signals
     SelectSignal = pyqtSignal(object)
@@ -68,6 +69,12 @@ class Floater(Frame):
 
 
 
+    # Special method for widget parenting. Deals with non-layout children.
+    #def AddWidgetToLayout( self, widget: QWidget, attribs: typing.List[typing.List[Qt.WidgetAttribute]], windowflags: typing.Set[typing.Union[Qt.WindowFlags, Qt.WindowType]] ):
+    #    AddWidgetToLayout( self.layout(), widget, attribs, windowflags )
+
+
+
     def mousePressEvent( self, event ):
         super(Floater, self).mousePressEvent(event)
         #print( 'Floater::mousePressEvent()...' )
@@ -104,7 +111,13 @@ class Floater(Frame):
 
 
 
-class TabBar(QTabBar):
+#####################################################################################
+#                                                                                   #
+#                                      TabBar                                       #
+#                                                                                   #
+#####################################################################################
+
+class TabBar( QTabBar ):
 
     # Signals
     DetachWidgetSignal = pyqtSignal(int)
@@ -335,8 +348,14 @@ class TabBar(QTabBar):
 
 
 
-# TabWidget
-class TabWidget(QTabWidget):
+
+#####################################################################################
+#                                                                                   #
+#                                     TabWidget                                     #
+#                                                                                   #
+#####################################################################################
+
+class TabWidget( QTabWidget ):
     
     # Signals
     RaiseSignal = pyqtSignal(object)
@@ -521,9 +540,13 @@ class TabWidget(QTabWidget):
 
 
 
+#####################################################################################
+#                                                                                   #
+#                 Independent Dockable Frame. Behaves like TabWidget                #
+#                                                                                   #
+#####################################################################################
 
-# Independent Dockable Frame. Behaves like TabWidget
-class DockableFrame(Frame):
+class DockableFrame( Frame ):
 
     # Signals
     RaiseSignal = pyqtSignal(object)
@@ -700,9 +723,76 @@ class DockableFrame(Frame):
         return self.__m_TabWidget.addTab( widget, label )
 
 
+    #def addTab( self, widget: QWidget, label: str ) -> int:
+    #    try:
+    #        print("DockableFrame::addTab()...")
+
+    #        attribs = [[Qt.WA_NoSystemBackground, Qt.WA_TranslucentBackground]]
+    #        windowflags =  Qt.Tool | Qt.FramelessWindowHint
+    #        # Unparent all non-layout child widgets
+    #        nonLayoutChildren = [ ch for ch in widget.children() if not ch in widget.layout().children() and isinstance(ch, QWidget) ]
+    #        for i in range(len(nonLayoutChildren)):
+    #            nonLayoutChildren[i].setParent(None)
+
+    #        # Add widget to layout
+    #        tab_idx = self.__m_TabWidget.addTab( widget, label )
+
+    #        # Re-parent non-layout children to widget
+    #        for i in range( len(nonLayoutChildren) ):
+    #            ch = nonLayoutChildren[i]
+    #            # Set parent
+    #            ch.setParent( widget )
+
+    #            # Set attributes
+    #            for attr in attribs[i]:
+    #                ch.setAttribute( attr )
+    #            # Set window flags
+    #            ch.setWindowFlags( windowflags )
+
+    #        return tab_idx
+
+    #    except:
+    #        traceback.print_exc()
+    #        return -1
+
+
 
     def insertTab( self, index: int, widget: QWidget, label: str ) -> int:
         return self.__m_TabWidget.insertTab( index, widget, label )
+
+    #def insertTab( self, index: int, widget: QWidget, label: str ) -> int:
+    #    try:
+
+    #        print("DockableFrame::InsertTab()...")
+
+    #        attribs = [[Qt.WA_NoSystemBackground, Qt.WA_TranslucentBackground]]
+    #        windowflags =  Qt.Tool | Qt.FramelessWindowHint
+
+    #        # Unparent all non-layout child widgets
+    #        nonLayoutChildren = [ ch for ch in widget.children() if not ch in widget.layout().children() and isinstance(ch, QWidget) ]
+    #        for i in range(len(nonLayoutChildren)):
+    #            nonLayoutChildren[i].setParent(None)
+
+    #        # Add widget to layout
+    #        tab_idx = self.__m_TabWidget.insertTab( index, widget, label )
+
+    #        # Re-parent non-layout children to widget
+    #        for i in range( len(nonLayoutChildren) ):
+    #            ch = nonLayoutChildren[i]
+    #            # Set parent
+    #            ch.setParent( widget )
+
+    #            # Set attributes
+    #            for attr in attribs[i]:
+    #                ch.setAttribute( attr )
+    #            # Set window flags
+    #            ch.setWindowFlags( windowflags )
+
+    #        return tab_idx
+
+    #    except:
+    #        traceback.print_exc()
+    #        return -1
 
 
 
@@ -759,6 +849,13 @@ class DockableFrame(Frame):
 
 
 
+
+
+#####################################################################################
+#                                                                                   #
+#                                TabbedMDIManager                                   #
+#                                                                                   #
+#####################################################################################
 
 class TabbedMDIManager:
 
@@ -909,6 +1006,7 @@ class TabbedMDIManager:
 
     def AddTab( self, dockable_id: typing.Any, widget: QWidget, label: str, widget_id: typing.Any) -> bool:
         try:
+            print("TabbedMDIManager::AddTab()...")
             if( not dockable_id in self.__m_Dockables ):
                 return False
 
@@ -925,6 +1023,7 @@ class TabbedMDIManager:
 
     def InsertTab( self, dockable_id: typing.Any, index: int, widget: QWidget, label: str, widget_id: typing.Any) -> bool:
         try:
+            print("TabbedMDIManager::InsertTab()...")
             if( not dockable_id in self.__m_Dockables ):
                 return False
 
@@ -1080,7 +1179,9 @@ class TabbedMDIManager:
         floater.resize( contentWidget.size() )
 
 #TODO: Implement Floater::AddWidgetToLayout( widget )
-
+        #attribs = [[Qt.WA_NoSystemBackground, Qt.WA_TranslucentBackground]]
+        #windowflags =  Qt.Tool | Qt.FramelessWindowHint
+        #floater.AddWidgetToLayout( contentWidget, attribs, windowflags )
         floater.layout().addWidget( contentWidget )
         contentWidget.setVisible(True)# MUST SET VISIBLE. Widgets detached from QTabWidget are INVISIBLE.
 
