@@ -455,9 +455,9 @@ class Frame( QFrame ):
 
 
 
-    # Special method for widget parenting. Deals with non-layout children.
-    def AddWidgetToLayout( self, widget: QWidget, attribs: typing.List[typing.List[Qt.WidgetAttribute]], windowflags: typing.Set[typing.Union[Qt.WindowFlags, Qt.WindowType]] ):
-        AddWidgetToLayout( self.layout(), widget, attribs, windowflags )
+    ## Special method for widget parenting. Deals with non-layout children.
+    #def AddWidgetToLayout( self, widget: QWidget, attribs: typing.List[typing.List[Qt.WidgetAttribute]], windowflags: typing.Set[typing.Union[Qt.WindowFlags, Qt.WindowType]] ):
+    #    AddWidgetToLayout( self.layout(), widget, attribs, windowflags )
 
         #try:
         #    # Unparent all non-layout child widgets
