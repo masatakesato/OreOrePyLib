@@ -994,25 +994,30 @@ QWidget
 
 
 
-g_NodeEditorStyleSheet = """
+g_EditorStyleSheet = """
 QGraphicsView
 {
-    background-color: rgb(24,24,24);/*rgb(42,42,42);*/
+    background-color: rgb(24,24,24);
     selection-background-color: rgb(125,75,50);
 
     margin: 0px 0px 0px 0px;
-    border: 0px none;/*border: 1px solid rgb(60,60,60);/*rgb(80,80,80);*/
+    border: 0px none;
     padding: 0px 0px 0px 0px;
 }
+"""
 
-/*
-QGraphicsView:focus
+
+
+g_TransparentEditorStyleSheet = """
+QGraphicsView
 {
+    background-color: transparent;
+    selection-background-color: rgb(125,75,50);
+
     margin: 0px 0px 0px 0px;
-    border: 1px solid rgb(96,96,96);
+    border: 0px none;
     padding: 0px 0px 0px 0px;
 }
-*/
 """
 
 

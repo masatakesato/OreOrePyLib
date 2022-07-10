@@ -45,7 +45,7 @@ class MainWindow( Frame ):
         return self.m_content
 
 
-#TODO: Deal with non-layouted child widgets.// unbind children -> setparent -> bind children again
+
     def setCentralWidget( self, widget ):
         if( self.m_content ):
             self.m_content.hide()
@@ -53,9 +53,6 @@ class MainWindow( Frame ):
         self.m_content = widget
         self.m_content.setSizePolicy( QSizePolicy.Preferred, QSizePolicy.Preferred )
         self.framelayout.addWidget( self.m_content )
-
-        #AddWidgetToLayout( self.framelayout, self.m_content, [[Qt.WA_NoSystemBackground, Qt.WA_TranslucentBackground]], Qt.Tool | Qt.FramelessWindowHint )
-
 
 
 

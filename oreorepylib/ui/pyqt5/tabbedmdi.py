@@ -69,12 +69,6 @@ class Floater( Frame ):
 
 
 
-    # Special method for widget parenting. Deals with non-layout children.
-    #def AddWidgetToLayout( self, widget: QWidget, attribs: typing.List[typing.List[Qt.WidgetAttribute]], windowflags: typing.Set[typing.Union[Qt.WindowFlags, Qt.WindowType]] ):
-    #    AddWidgetToLayout( self.layout(), widget, attribs, windowflags )
-
-
-
     def mousePressEvent( self, event ):
         super(Floater, self).mousePressEvent(event)
         #print( 'Floater::mousePressEvent()...' )
@@ -84,7 +78,7 @@ class Floater( Frame ):
 
     
     def mouseMoveEvent( self, event ):
-        #print( 'Floater::mouseMoveEvent()...' )
+        print( 'Floater::mouseMoveEvent()...' )
         # Avoid docking at the end of widget resize operation
         if( self.handleSelected is None ):
             self.MoveSignal.emit( self.__m_ID, event.globalPos() )
@@ -188,7 +182,7 @@ class TabBar( QTabBar ):
 
     def SetFocusIndex( self, index ):
         if( self.__m_FocusIndex!=index ):
-            #print( 'TabBar::SetFocusIndex()...%s: %d' % ( self.parentWidget().windowTitle(), index ) )
+            print( 'TabBar::SetFocusIndex()...%s: %d' % ( self.parentWidget().windowTitle(), index ) )
             self.__m_FocusIndex = index
             self.update()
 
@@ -235,7 +229,7 @@ class TabBar( QTabBar ):
 
 
     def mousePressEvent( self, event ):
-        #print( 'TabBar::mousePressEvent()...' )
+        print( 'TabBar::mousePressEvent()...' )
 
         # Triggers tab drag operations ONLY WHEN LEFT MOUSE PRESSED.
         if( event.button()==Qt.LeftButton ):
@@ -260,7 +254,7 @@ class TabBar( QTabBar ):
 
 
     def mouseMoveEvent( self, event ):
-        #print( 'TabBar::mouseMoveEvent()...' )
+        print( 'TabBar::mouseMoveEvent()...' )
         pos = event.pos()
 
         if( self.__m_DragMode==TabBar.__DRAG_WIDGET__ ):
@@ -723,76 +717,9 @@ class DockableFrame( Frame ):
         return self.__m_TabWidget.addTab( widget, label )
 
 
-    #def addTab( self, widget: QWidget, label: str ) -> int:
-    #    try:
-    #        print("DockableFrame::addTab()...")
-
-    #        attribs = [[Qt.WA_NoSystemBackground, Qt.WA_TranslucentBackground]]
-    #        windowflags =  Qt.Tool | Qt.FramelessWindowHint
-    #        # Unparent all non-layout child widgets
-    #        nonLayoutChildren = [ ch for ch in widget.children() if not ch in widget.layout().children() and isinstance(ch, QWidget) ]
-    #        for i in range(len(nonLayoutChildren)):
-    #            nonLayoutChildren[i].setParent(None)
-
-    #        # Add widget to layout
-    #        tab_idx = self.__m_TabWidget.addTab( widget, label )
-
-    #        # Re-parent non-layout children to widget
-    #        for i in range( len(nonLayoutChildren) ):
-    #            ch = nonLayoutChildren[i]
-    #            # Set parent
-    #            ch.setParent( widget )
-
-    #            # Set attributes
-    #            for attr in attribs[i]:
-    #                ch.setAttribute( attr )
-    #            # Set window flags
-    #            ch.setWindowFlags( windowflags )
-
-    #        return tab_idx
-
-    #    except:
-    #        traceback.print_exc()
-    #        return -1
-
-
 
     def insertTab( self, index: int, widget: QWidget, label: str ) -> int:
         return self.__m_TabWidget.insertTab( index, widget, label )
-
-    #def insertTab( self, index: int, widget: QWidget, label: str ) -> int:
-    #    try:
-
-    #        print("DockableFrame::InsertTab()...")
-
-    #        attribs = [[Qt.WA_NoSystemBackground, Qt.WA_TranslucentBackground]]
-    #        windowflags =  Qt.Tool | Qt.FramelessWindowHint
-
-    #        # Unparent all non-layout child widgets
-    #        nonLayoutChildren = [ ch for ch in widget.children() if not ch in widget.layout().children() and isinstance(ch, QWidget) ]
-    #        for i in range(len(nonLayoutChildren)):
-    #            nonLayoutChildren[i].setParent(None)
-
-    #        # Add widget to layout
-    #        tab_idx = self.__m_TabWidget.insertTab( index, widget, label )
-
-    #        # Re-parent non-layout children to widget
-    #        for i in range( len(nonLayoutChildren) ):
-    #            ch = nonLayoutChildren[i]
-    #            # Set parent
-    #            ch.setParent( widget )
-
-    #            # Set attributes
-    #            for attr in attribs[i]:
-    #                ch.setAttribute( attr )
-    #            # Set window flags
-    #            ch.setWindowFlags( windowflags )
-
-    #        return tab_idx
-
-    #    except:
-    #        traceback.print_exc()
-    #        return -1
 
 
 
@@ -810,7 +737,7 @@ class DockableFrame( Frame ):
 
 
     def mouseMoveEvent( self, event ):
-        #print( 'DockableFrame::mouseMoveEvent()...%s' % self.windowTitle() )
+        print( 'DockableFrame::mouseMoveEvent()...%s' % self.windowTitle() )
         if( self.handleSelected is None and self.IsVolatile() ):# Avoid docking check while resizing widget.
             self.MoveSignal.emit( self.__m_ID, event.globalPos() )
         return super(DockableFrame, self).mouseMoveEvent(event)
@@ -976,6 +903,26 @@ class TabbedMDIManager:
 
 
 
+    def GetDockableByDepthOrder( self, depth: int ) -> typing.Any:
+        try:
+            return self.__m_Order[ depth ]
+
+        except:
+            traceback.print_exc()
+            return None
+
+
+
+    def GetFrontDockable( self ) -> typing.Any:
+        return self.GetDockableByDepthOrder( 0 )
+
+
+
+    def GetBottomDockable( self ) -> typing.Any:
+        return self.GetDockableByDepthOrder( -1 )
+
+
+
     def FindParentDockable( self, widget_id: typing.Any ) -> (typing.Any, int):
         try:
             dockableID = None
@@ -1004,26 +951,29 @@ class TabbedMDIManager:
 
 
 
-    def AddTab( self, dockable_id: typing.Any, widget: QWidget, label: str, widget_id: typing.Any) -> bool:
+    def AddTab( self, dockable_id: typing.Any, widget: QWidget, label: str, widget_id: typing.Any, closable: bool=True, detachable:bool=True ) -> bool:
         try:
-            print("TabbedMDIManager::AddTab()...")
+            #print("TabbedMDIManager::AddTab()...")
             if( not dockable_id in self.__m_Dockables ):
-                return False
+                return -1
 
             self.__m_ContentWidgets[ widget_id ] = widget
-            self.__m_Dockables[ dockable_id ].addTab( widget, label )
+            index = self.__m_Dockables[ dockable_id ].addTab( widget, label )
 
-            return True
+            self.__m_Dockables[ dockable_id ].SetTabClosable( index, closable )
+            self.__m_Dockables[ dockable_id ].SetTabDetachable ( index, detachable )
+
+            return index
 
         except:
             traceback.print_exc()
-            return False
+            return -1
 
 
 
     def InsertTab( self, dockable_id: typing.Any, index: int, widget: QWidget, label: str, widget_id: typing.Any) -> bool:
         try:
-            print("TabbedMDIManager::InsertTab()...")
+            #print("TabbedMDIManager::InsertTab()...")
             if( not dockable_id in self.__m_Dockables ):
                 return False
 
@@ -1123,7 +1073,7 @@ class TabbedMDIManager:
 
     def Activate( self, dockable_id, index=-1 ):
         try:
-            #print( 'TabbedMDIManager::Activate()... {}, {}'.format( self.__m_Dockables[ dockable_id ].windowTitle(), index ) )
+            print( 'TabbedMDIManager::Activate()... {}, {}'.format( self.__m_Dockables[ dockable_id ].windowTitle(), index ) )
             self.__UpdateTopMost( dockable_id )
             self.__m_Dockables[ dockable_id ].setCurrentIndex( index )        
             self.__m_Dockables[ dockable_id ].activateWindow()
@@ -1177,11 +1127,6 @@ class TabbedMDIManager:
         floater.SetAttribs( { 'TabClosable': ownerWidget.IsTabClosable(index), 'Size': ownerWidget.size() } )
         floater.setWindowTitle( contentWidget.windowTitle() )
         floater.resize( contentWidget.size() )
-
-#TODO: Implement Floater::AddWidgetToLayout( widget )
-        #attribs = [[Qt.WA_NoSystemBackground, Qt.WA_TranslucentBackground]]
-        #windowflags =  Qt.Tool | Qt.FramelessWindowHint
-        #floater.AddWidgetToLayout( contentWidget, attribs, windowflags )
         floater.layout().addWidget( contentWidget )
         contentWidget.setVisible(True)# MUST SET VISIBLE. Widgets detached from QTabWidget are INVISIBLE.
 
@@ -1263,7 +1208,7 @@ class TabbedMDIManager:
 
 
     def __MergeDockables( self ):
-        #print( 'TabbedMDIManager::__MergeDockables()...' )
+        print( 'TabbedMDIManager::__MergeDockables()...' )
 
         emptyOwnerIDs = [ owner_id for owner_id, widget in self.__m_Dockables.items() if widget.IsTrashed() ]
 
@@ -1275,7 +1220,6 @@ class TabbedMDIManager:
 
                 contentWidget = floater.layout().itemAt(0).widget()
 
-#TODO: Implement DockableFrame::AddTab( page, label ), AddTab( page, icon, label )
                 ownerWidget.addTab( contentWidget, contentWidget.windowTitle() )
                 ownerWidget.SetTabClosable( 0, floater.GetAttribs()[ 'TabClosable' ] )
                 ownerWidget.resize( floater.GetAttribs()[ 'Size' ] )
@@ -1367,7 +1311,7 @@ class TabbedMDIManager:
 
     # Dock floater to dockable
     def __AttachFloater( self, globalPos ):
-        #print( 'TabbedMDIManager::__AttachFloater()...' )
+        print( 'TabbedMDIManager::__AttachFloater()...' )
 
         floater = self.__m_Floaters[ self.__m_CurrFloaterID ]
         attribs = floater.GetAttribs()
@@ -1384,8 +1328,6 @@ class TabbedMDIManager:
                 
                 if( floater.layout().count() > 0 ):
                     contentWidget = floater.layout().itemAt(0).widget()
-#TODO: Implement DockableFrame::InsertTab( index, page, label ), InsertTab( index, page, icon, label )
-
                     ownerWidget.insertTab( index, contentWidget, contentWidget.windowTitle() )
                     ownerWidget.SetTabClosable( index, attribs[ 'TabClosable' ] )
                     ownerWidget.activateWindow()
@@ -1404,7 +1346,7 @@ class TabbedMDIManager:
 
 
     def __AttachDockable( self, widget_id, globalPos ):
-        #print( 'TabbedMDIManager::__AttachDockable()...' )
+        print( 'TabbedMDIManager::__AttachDockable()...' )
 
         srcDockable = self.__m_Dockables[ widget_id ]
         numActiveSrcTabs = srcDockable.NumActiveTabs()
@@ -1425,8 +1367,6 @@ class TabbedMDIManager:
                     tabClosable = srcDockable.IsTabClosable(0)
 
                     # insert into tab position[index + i]
-#TODO: Implement DockableFrame::InsertTab( index, page, label ), InsertTab( index, page, icon, label )
-
                     destDockable.insertTab( index+i, contentWidget, contentWidget.windowTitle() )
                     destDockable.SetTabClosable( index+i, tabClosable )
                     contentWidget.setVisible(True)

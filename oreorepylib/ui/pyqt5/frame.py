@@ -21,30 +21,30 @@ from PyQt5.QtWidgets import *
 #                                                                                   #
 #####################################################################################
 
-def AddWidgetToLayout( layout: QLayout, widget: QWidget, attribs: typing.List[typing.List[Qt.WidgetAttribute]], windowflags: typing.Set[typing.Union[Qt.WindowFlags, Qt.WindowType]] ):
-    try:
-        # Unparent all non-layout child widgets
-        nonLayoutChildren = [ ch for ch in widget.children() if not ch in widget.layout().children() and isinstance(ch, QWidget) ]
-        for i in range(len(nonLayoutChildren)):
-            nonLayoutChildren[i].setParent(None)
+#def AddWidgetToLayout( layout: QLayout, widget: QWidget, attribs: typing.List[typing.List[Qt.WidgetAttribute]], windowflags: typing.Set[typing.Union[Qt.WindowFlags, Qt.WindowType]] ):
+#    try:
+#        # Unparent all non-layout child widgets
+#        nonLayoutChildren = [ ch for ch in widget.children() if not ch in widget.layout().children() and isinstance(ch, QWidget) ]
+#        for i in range(len(nonLayoutChildren)):
+#            nonLayoutChildren[i].setParent(None)
 
-        # Add widget to layout
-        layout.addWidget( widget )
+#        # Add widget to layout
+#        layout.addWidget( widget )
 
-        # Re-parent non-layout children to widget
-        for i in range( len(nonLayoutChildren) ):
-            ch = nonLayoutChildren[i]
-            # Set parent
-            ch.setParent( widget )
+#        # Re-parent non-layout children to widget
+#        for i in range( len(nonLayoutChildren) ):
+#            ch = nonLayoutChildren[i]
+#            # Set parent
+#            ch.setParent( widget )
 
-            # Set attributes
-            for attr in attribs[i]:
-                ch.setAttribute( attr )
-            # Set window flags
-            ch.setWindowFlags( windowflags )
+#            # Set attributes
+#            for attr in attribs[i]:
+#                ch.setAttribute( attr )
+#            # Set window flags
+#            ch.setWindowFlags( windowflags )
 
-    except:
-        traceback.print_exc()
+#    except:
+#        traceback.print_exc()
 
 
 
@@ -458,30 +458,6 @@ class Frame( QFrame ):
     ## Special method for widget parenting. Deals with non-layout children.
     #def AddWidgetToLayout( self, widget: QWidget, attribs: typing.List[typing.List[Qt.WidgetAttribute]], windowflags: typing.Set[typing.Union[Qt.WindowFlags, Qt.WindowType]] ):
     #    AddWidgetToLayout( self.layout(), widget, attribs, windowflags )
-
-        #try:
-        #    # Unparent all non-layout child widgets
-        #    nonLayoutChildren = [ ch for ch in widget.children() if not ch in widget.layout().children() and isinstance(ch, QWidget) ]
-        #    for i in range(len(nonLayoutChildren)):
-        #        nonLayoutChildren[i].setParent(None)
-
-        #    # Add widget to layout
-        #    self.layout().addWidget( widget )
-
-        #    # Re-parent non-layout children to widget
-        #    for i in range( len(nonLayoutChildren) ):
-        #        ch = nonLayoutChildren[i]
-        #        # Set parent
-        #        ch.setParent( widget )
-
-        #        # Set attributes
-        #        for attr in attribs[i]:
-        #            ch.setAttribute( attr )
-        #        # Set window flags
-        #        ch.setWindowFlags( windowflags )
-
-        #except:
-        #    traceback.print_exc()
 
 
 
