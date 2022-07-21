@@ -6,8 +6,8 @@ import os
 
 
 
-g_InPipeName = r"\\.\pipe\Foo2"
-g_OutPipeName = r"\\.\pipe\Foo1"
+g_InPipeName = r"\\.\pipe\Bar"
+g_OutPipeName = r"\\.\pipe\Foo"
 
 
 
@@ -72,7 +72,7 @@ if __name__=="__main__":
             node.StopListen()
 
         elif( input_text=="testrpc" ):
-            print( node.Call( compat.ToUnicode("Str"), u"Key" ) )
-            #print( node.Call( "Add", 4, 6 ) )
+            #print( node.Call( compat.ToUnicode("Str"), u"Key" ) )
+            print( node.Call( "Add", 4, 6 ) )
 
     del node

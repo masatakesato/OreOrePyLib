@@ -3,8 +3,8 @@ from halfduplexnode import *
 
 
 
-g_InPipeName = r"\\.\pipe\Foo1"
-g_OutPipeName = r"\\.\pipe\Foo2"
+g_InPipeName = r"\\.\pipe\Foo"
+g_OutPipeName = r"\\.\pipe\Bar"
 
 
 
