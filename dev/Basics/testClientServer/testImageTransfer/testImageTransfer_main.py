@@ -1,5 +1,5 @@
 ﻿from oreorepylib.utils import environment
-import oreorepylib.network as oreoreRPC
+import oreorepylib.network.socket as oreoreRPC
 
 #import numpy as np
 import io

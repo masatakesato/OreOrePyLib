@@ -1,4 +1,4 @@
-﻿import oreorelib.network as oreoreRPC
+﻿import oreorelib.network.socket as oreoreRPC
 
 import argparse
 import pathlib

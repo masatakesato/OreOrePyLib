@@ -1,4 +1,6 @@
-﻿import pathlib
+﻿import oreorepylib.utils.environment
+
+import pathlib
 from PIL import Image
 
 

@@ -3,7 +3,7 @@ import argparse
 import pathlib
 
 from VisualSearch_UI import *
-import oreorepylib.network as oreoreRPC
+import oreorepylib.network.socket as oreoreRPC
 
 
 

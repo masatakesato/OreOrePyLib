@@ -8,7 +8,7 @@
     </ProjectHome>
     <StartupFile>
     </StartupFile>
-    <SearchPath>..\..\..\..\;..\Crawling\</SearchPath>
+    <SearchPath>..\..\..\..\;..\Crawling\;..\..\..\..\..\..\Lib\umsgpack</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>testSearcher</Name>
@@ -16,6 +16,7 @@
     <LaunchProvider>Standard Python launcher</LaunchProvider>
     <CommandLineArguments>--host=localhost --port=5007</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
+    <InterpreterId>CondaEnv|CondaEnv|tensorflow_dev</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,7 +33,9 @@
     <Compile Include="Searcher.py" />
     <Compile Include="SearcherServer.py" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <InterpreterReference Include="CondaEnv|CondaEnv|tensorflow_dev" />
+  </ItemGroup>
   <!-- Uncomment the CoreCompile target to enable the Build command in
        Visual Studio and specify your pre- and post-build commands in
        the BeforeBuild and AfterBuild targets below. -->

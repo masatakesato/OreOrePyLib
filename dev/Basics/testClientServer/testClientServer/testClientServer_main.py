@@ -1,6 +1,6 @@
 ﻿import oreorepylib.utils.environment
 
-import oreorepylib.network as oreoreRPC
+import oreorepylib.network.socket as oreoreRPC
 
 
 # https://stackoverflow.com/questions/17667903/python-socket-receive-large-amount-of-data

@@ -16,6 +16,7 @@
     </CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
     <IsWindowsApplication>False</IsWindowsApplication>
+    <InterpreterId>CondaEnv|CondaEnv|tensorflow_dev</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,7 +30,9 @@
     <Compile Include="testRetrievalClient_main.py" />
     <Compile Include="testRetrieval_main.py" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <InterpreterReference Include="CondaEnv|CondaEnv|tensorflow_dev" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
   </PropertyGroup>

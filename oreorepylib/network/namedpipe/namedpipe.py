@@ -16,8 +16,8 @@ from ctypes.wintypes import DWORD
 import traceback
 
 import oreorepylib.utils.compat as compat
-from oreorepylib.network.message_protocol import SendMessageError, ReceiveMessageError
-from oreorepylib.network.serializer import Serializer
+from ..message_protocol import SendMessageError, ReceiveMessageError
+from ..serializer import Serializer
 
 
 Kernel32 = ctypes.windll.kernel32
