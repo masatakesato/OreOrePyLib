@@ -1,4 +1,4 @@
-﻿from namedpiperpc import *
+﻿from .namedpiperpc import *
 
 
 import threading

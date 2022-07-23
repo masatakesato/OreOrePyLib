@@ -1,6 +1,5 @@
 ﻿import oreorepylib.utils.compat as compat
-
-from halfduplexrpcnode import *
+from oreorepylib.network.namedpipe.halfduplexrpcnode import *
 
 import os
 

@@ -21,8 +21,6 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="halfduplexrpcnode.py" />
-    <Compile Include="namedpiperpc.py" />
     <Compile Include="testHalfDuplexRPC1.py" />
     <Compile Include="testHalfDuplexRPC2.py" />
     <Compile Include="testNamedPipeRPCClient_main.py" />

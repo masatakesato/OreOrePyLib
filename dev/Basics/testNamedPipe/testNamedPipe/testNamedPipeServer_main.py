@@ -1,4 +1,4 @@
-﻿from namedpipe import *
+﻿from oreorepylib.network.namedpipe.namedpipe import *
 
 
 import threading

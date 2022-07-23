@@ -11,7 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>testNamedPipe</Name>
     <RootNamespace>testNamedPipe</RootNamespace>
-    <InterpreterId>CondaEnv|CondaEnv|python27</InterpreterId>
+    <InterpreterId>CondaEnv|CondaEnv|testpy37</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,8 +22,6 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="halfduplexnode.py" />
-    <Compile Include="namedpipe.py" />
     <Compile Include="testHalfDuplex1.py" />
     <Compile Include="testHalfDuplex2.py" />
     <Compile Include="testNamedPipe.py" />

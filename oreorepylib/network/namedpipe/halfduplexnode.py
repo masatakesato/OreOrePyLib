@@ -1,4 +1,4 @@
-﻿from namedpipe import *
+﻿from .namedpipe import *
 
 
 import threading

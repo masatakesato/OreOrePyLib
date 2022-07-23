@@ -1,5 +1,5 @@
 ﻿import oreorepylib.utils.compat as compat
-from namedpipe import *
+from oreorepylib.network.namedpipe.namedpipe import *
 
 import threading
 import time
