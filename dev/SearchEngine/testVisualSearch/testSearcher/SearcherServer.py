@@ -3,7 +3,7 @@
 import pathlib
 import argparse
 
-import oreorepylib.network.socket as oreoreRPC
+import oreorepylib.network.tcp as tcp
 
 from Searcher import Searcher
 
@@ -39,10 +39,10 @@ if __name__ == '__main__':
 
     searcher = SearcherServer()
     searcher.Init( path_root )
-    #server = oreoreRPC.Server( searcher )
-    #server = oreoreRPC.SSLServer( searcher )
-    server = oreoreRPC.ServerThreading( searcher )
-    #server = oreoreRPC.ServerPrethreading( searcher )
+    #server = tcp.Server( searcher )
+    #server = tcp.SSLServer( searcher )
+    server = tcp.ServerThreading( searcher )
+    #server = tcp.ServerPrethreading( searcher )
 
     try:
         server.listen( host, port, backlog=10 )

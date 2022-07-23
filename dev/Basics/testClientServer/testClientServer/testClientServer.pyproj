@@ -11,7 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>testClientServer</Name>
     <RootNamespace>testClientServer</RootNamespace>
-    <InterpreterId>CondaEnv|CondaEnv|env_searchclient</InterpreterId>
+    <InterpreterId>CondaEnv|CondaEnv|python27</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>

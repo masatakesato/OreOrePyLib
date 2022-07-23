@@ -3,7 +3,7 @@ import argparse
 import pathlib
 
 from VisualSearch_UI import *
-import oreorepylib.network.socket as oreoreRPC
+import oreorepylib.network.tcp as tcp
 
 
 
@@ -12,15 +12,15 @@ path_thumbnails = pathlib.Path( '../data/thumbnails' )# './frames' #'V:/Moa/mana
 
 
 
-class SearcherClient( oreoreRPC.Client ):
+class SearcherClient( tcp.Client ):
 
     def __init__( self, host, port ):
         super(SearcherClient, self).__init__( host, port, 60, 5 )
-        #self.client = oreoreRPC.Client( host, port, 60, 5 )
+        #self.client = tcp.Client( host, port, 60, 5 )
     
     #def IsReady( self ):
     #    print('hshgsfd')
-    #    return oreoreRPC.Client.IsReady()
+    #    return tcp.Client.IsReady()
 
 
     def InputShape( self, *argc, **argv ):

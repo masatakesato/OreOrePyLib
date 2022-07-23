@@ -1,4 +1,4 @@
-﻿import oreorelib.network.socket as oreoreRPC
+﻿import oreorelib.network.tcp as tcp
 
 import argparse
 import pathlib
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     port = args.port
 
 
-    client = oreoreRPC.Client( host, port, 60, 5 )
+    client = tcp.Client( host, port, 60, 5 )
 
     input_shape = client.call( 'InputShape' )# input_shape = searcher.InputShape()
     img_size = ( input_shape[2], input_shape[1] )

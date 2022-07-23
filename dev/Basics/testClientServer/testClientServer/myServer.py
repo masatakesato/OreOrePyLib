@@ -1,6 +1,6 @@
 ﻿import oreorepylib.utils.environment
 
-import oreorepylib.network.socket as oreoreRPC#from oreorelib.network import server_threading
+import oreorepylib.network.tcp as tcp#from oreorelib.network import server_threading
 import time
 
 
@@ -17,10 +17,10 @@ class AddServer:
 
 if __name__=='__main__':
 
-    #server = oreoreRPC.Server( AddServer() )
-    #server = oreoreRPC.SSLServer( AddServer() )
-    #server = oreoreRPC.ServerThreading( AddServer() )# server_threading.ServerThreading( AddServer() )
-    server = oreoreRPC.ServerPrethreading( AddServer(), 6 )
+    #server = tcp.Server( AddServer() )
+    #server = tcp.SSLServer( AddServer() )
+    #server = tcp.ServerThreading( AddServer() )# server_threading.ServerThreading( AddServer() )
+    server = tcp.ServerPrethreading( AddServer(), 6 )
 
     try:
         server.listen( host='localhost', port=5007, backlog=10 )

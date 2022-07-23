@@ -1,5 +1,5 @@
 ﻿from oreorepylib.utils import environment
-import oreorepylib.network.socket as oreoreRPC
+import oreorepylib.network.tcp as tcp
 
 #import numpy as np
 import io
@@ -16,8 +16,8 @@ port = 5007
 
 if __name__=='__main__':
     
-    client = oreoreRPC.Client( host, port, 60, 5 )
-    #client = oreoreRPC.SSLClient( host, port, 60, 5 )
+    client = tcp.Client( host, port, 60, 5 )
+    #client = tcp.SSLClient( host, port, 60, 5 )
     
     data_bin = client.call( 'Load', './0_Explosion_05.gif' )
 

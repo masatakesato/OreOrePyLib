@@ -1,5 +1,5 @@
 ﻿from oreorepylib.utils import environment
-import oreorepylib.network.socket as oreoreRPC
+import oreorepylib.network.tcp as tcp
 
 import io
 import pathlib
@@ -40,10 +40,10 @@ class ImageLoadServer:
 
 if __name__=='__main__':
 
-    #server = oreoreRPC.Server( ImageLoadServer() )
-    #server = oreoreRPC.SSLServer( ImageLoadServer() )
-    #server = oreoreRPC.ServerThreading( ImageLoadServer() )
-    server = oreoreRPC.ServerPrethreading( ImageLoadServer() )
+    #server = tcp.Server( ImageLoadServer() )
+    #server = tcp.SSLServer( ImageLoadServer() )
+    #server = tcp.ServerThreading( ImageLoadServer() )
+    server = tcp.ServerPrethreading( ImageLoadServer() )
 
     try:
         server.listen( host='localhost', port=5007, backlog=10 )
