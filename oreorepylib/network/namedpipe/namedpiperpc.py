@@ -285,6 +285,9 @@ class PipeClientRPC:
 
     def Connect( self, pipe_name ):
 
+        if( self.__m_PipeHandle ):
+            return
+
         self.__m_PipeName = pipe_name
 
         # https://programtalk.com/vs4/python/7855/conveyor/src/main/python/conveyor/address.py/

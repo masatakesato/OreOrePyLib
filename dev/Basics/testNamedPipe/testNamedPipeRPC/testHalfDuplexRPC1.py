@@ -3,7 +3,7 @@ from oreorepylib.network.namedpipe.halfduplexrpcnode import *
 
 import os
 import time
-
+import weakref
 
 
 g_InPipeName = r"\\.\pipe\Foo"
@@ -13,6 +13,9 @@ g_OutPipeName = r"\\.\pipe\Bar"
 
 
 class Procedure:
+
+    m_refNode = None
+
 
     def NoReturn( self ):
         print( "Procedure::NoReturn()..." )
@@ -34,7 +37,10 @@ class Procedure:
 
         print( d[string] )
 
-        
+
+    def ConnectSender( self, out_pipe_name ):
+        self.m_refNode().Connect( out_pipe_name )
+
 
 
 
@@ -44,6 +50,8 @@ if __name__=="__main__":
 
     proc = Procedure()
     node = HalfDuplexRPCNode( g_InPipeName )
+
+    proc.m_refNode = weakref.ref(node)
 
     node.BindProcInstance( proc )
 

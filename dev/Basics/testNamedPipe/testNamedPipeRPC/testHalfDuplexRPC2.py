@@ -64,6 +64,10 @@ if __name__=="__main__":
         elif( input_text=="connect" ):
             node.Connect( g_OutPipeName )
 
+        elif( input_text=="handshake" ):
+            node.Connect( g_OutPipeName )# Connect Node1 to Node2 
+            node.Call( "ConnectSender", g_InPipeName )# Connect from
+
         elif( input_text=="startlisten" ):
             node.StartListen()
 
