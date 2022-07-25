@@ -285,22 +285,32 @@ class PipeClientRPC:
 
     def Connect( self, pipe_name ):
 
-        if( self.__m_PipeHandle ):
-            return
+        #if( self.__m_PipeHandle ):
+        #    return
+        self.Disconnect()
 
         self.__m_PipeName = pipe_name
 
-        # https://programtalk.com/vs4/python/7855/conveyor/src/main/python/conveyor/address.py/
         # Establish pipe connection
-        self.__m_PipeHandle = CreateFile(
-            self.__m_PipeName,#r'\\.\pipe\Foo',
-            Win32Constant.GENERIC_READ | Win32Constant.GENERIC_WRITE,
-            0,
-            None,
-            Win32Constant.OPEN_EXISTING,
-            0,
-            None
-        )
+        trials = 0
+        while( trials < self.__m_MaxTrials ):
+
+            # https://programtalk.com/vs4/python/7855/conveyor/src/main/python/conveyor/address.py/
+            self.__m_PipeHandle = CreateFile(
+                self.__m_PipeName,#r'\\.\pipe\Foo',
+                Win32Constant.GENERIC_READ | Win32Constant.GENERIC_WRITE,
+                0,
+                None,
+                Win32Constant.OPEN_EXISTING,
+                0,
+                None
+            )
+
+            if( self.__m_PipeHandle ):
+                break
+            
+            time.Sleep( 0.015 );# sleep 15ms
+            trials += 1
 
         # Check error after file creation
         err = ctypes.GetLastError()

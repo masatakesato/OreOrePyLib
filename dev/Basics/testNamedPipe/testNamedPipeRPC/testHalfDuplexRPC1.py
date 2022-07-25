@@ -3,7 +3,7 @@ from oreorepylib.network.namedpipe.halfduplexrpcnode import *
 
 import os
 import time
-import weakref
+
 
 
 g_InPipeName = r"\\.\pipe\Foo"
@@ -12,22 +12,23 @@ g_OutPipeName = r"\\.\pipe\Bar"
 
 
 
-class Procedure:
+class RemoteProcedure( RemoteProcedureBase ):
 
-    m_refNode = None
+    def __init__( self, node: HalfDuplexRPCNode ):
+        super(RemoteProcedure, self).__init__( node )
 
 
     def NoReturn( self ):
-        print( "Procedure::NoReturn()..." )
+        print( "RemoteProcedure::NoReturn()..." )
 
 
     def Test( self ):
-        print( "Procedure::Test()..." )
+        print( "RemoteProcedure::Test()..." )
         return "OK..."
 
 
     def Add( self, a, b ):
-        print( "Procedure::Add( %d, %d )..." % (a, b) )
+        print( "RemoteProcedure::Add( %d, %d )..." % (a, b) )
         return a + b
 
 
@@ -38,20 +39,14 @@ class Procedure:
         print( d[string] )
 
 
-    def ConnectSender( self, out_pipe_name ):
-        self.m_refNode().Connect( out_pipe_name )
-
-
 
 
 if __name__=="__main__":
 
     os.system( "title " + g_InPipeName )
 
-    proc = Procedure()
     node = HalfDuplexRPCNode( g_InPipeName )
-
-    proc.m_refNode = weakref.ref(node)
+    proc = RemoteProcedure( node )
 
     node.BindProcInstance( proc )
 
@@ -68,11 +63,17 @@ if __name__=="__main__":
         if( input_text == "quit" ):
             break
 
-        elif( input_text=="disconnect" ):
+        elif( input_text=="connectto" ):
+            node.Connect( g_OutPipeName )
+
+        elif( input_text=="disconnectto" ):
             node.Disconnect()
 
-        elif( input_text=="connect" ):
-            node.Connect( g_OutPipeName )
+        elif( input_text=="connectfrom" ):
+            node.Call( "Connect", g_InPipeName )
+
+        elif( input_text=="disconnectfrom" ):
+            node.Call( "Disconnect" )
 
         elif( input_text=="startlisten" ):
             node.StartListen()

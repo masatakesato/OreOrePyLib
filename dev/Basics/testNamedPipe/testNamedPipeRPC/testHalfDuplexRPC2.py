@@ -11,24 +11,28 @@ g_OutPipeName = r"\\.\pipe\Foo"
 
 
 
-class Procedure:
+class RemoteProcedure( RemoteProcedureBase ):
+
+    def __init__( self, node: HalfDuplexRPCNode ):
+        super(RemoteProcedure, self).__init__( node )
+
 
     def NoReturn( self ):
-        print( "Procedure::NoReturn()..." )
+        print( "RemoteProcedure::NoReturn()..." )
 
 
     def Test( self ):
-        print( "Procedure::Test()..." )
+        print( "RemoteProcedure::Test()..." )
         return "OK..."
 
 
     def Add( self, a, b ):
-        print( "Procedure::Add( %d, %d )..." % (a, b) )
+        print( "RemoteProcedure::Add( %d, %d )..." % (a, b) )
         return a + b
 
 
     def TestArrayTransfer( self, arr ):
-        print( "Procedure::TestArrayTransfer()..." )
+        print( "RemoteProcedure::TestArrayTransfer()..." )
 
         for v in arr:
             print( v )
@@ -40,9 +44,8 @@ if __name__=="__main__":
 
     os.system( "title " + g_InPipeName )
 
-    proc = Procedure()
     node = HalfDuplexRPCNode( g_InPipeName )
-
+    proc = RemoteProcedure( node )
     node.BindProcInstance( proc )
 
     if( not node.StartListen() ):
@@ -58,15 +61,17 @@ if __name__=="__main__":
         if( input_text == "quit" ):
             break
 
-        elif( input_text=="disconnect" ):
-            node.Disconnect()
-
-        elif( input_text=="connect" ):
+        elif( input_text=="connectto" ):
             node.Connect( g_OutPipeName )
 
-        elif( input_text=="handshake" ):
-            node.Connect( g_OutPipeName )# Connect Node1 to Node2 
-            node.Call( "ConnectSender", g_InPipeName )# Connect from
+        elif( input_text=="disconnectto" ):
+            node.Disconnect()
+
+        elif( input_text=="connectfrom" ):
+            node.Call( "Connect", g_InPipeName )
+
+        elif( input_text=="disconnectfrom" ):
+            node.Call( "Disconnect" )
 
         elif( input_text=="startlisten" ):
             node.StartListen()

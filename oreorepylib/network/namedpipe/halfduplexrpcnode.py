@@ -1,6 +1,6 @@
 ﻿from .namedpiperpc import *
 
-
+import weakref
 import threading
 
 
@@ -93,3 +93,24 @@ class HalfDuplexRPCNode:
 
 
 
+class RemoteProcedureBase:
+
+    def __init__( self, node: HalfDuplexRPCNode ):
+        self.__m_refNode = weakref.ref( node )
+
+
+    #def __del__( self ): pass
+
+
+    def Connect( self, out_pipe_name ):
+        try:
+            self.__m_refNode().Connect( out_pipe_name )
+        except:
+            traceback.print_exec()
+
+
+    def Disconnect( self ):
+        try:
+            self.__m_refNode().Disconnect()
+        except:
+            traceback.print_exec()
